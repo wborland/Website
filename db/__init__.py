@@ -1,12 +1,29 @@
 from flask import g
 
 import MySQLdb as sql
+from configparser import SafeConfigParser
+import os
+
 from MySQLdb.cursors import DictCursor
 
 
 
 def make_conn():
-    return sql.connect(host="website.czubge8ebda6.us-east-1.rds.amazonaws.com", db="website", passwd="willwebsite",user="will")
+   
+	parser = SafeConfigParser()
+
+	if os.path.isfile('/home/ubuntu/database.ini'):
+		path = '/home/ubuntu/database.ini'
+	else:
+		path = '../database.ini'
+
+	parser.read(path)
+
+	return sql.connect(
+    	host=parser.get('database','host'), 
+    	db=parser.get('database','name'),
+    	passwd=parser.get('database','pass'),
+    	user=parser.get('database','user'))
 
     
 def conn():
