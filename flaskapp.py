@@ -54,6 +54,15 @@ def admin():
 def login():
 	return render_template('login.html')
 
+@app.route('/loginCheck', methods = ['POST'])
+def loginCheck():
+	password = request.form["password"]
+
+	if password == "password":
+		return redirect(url_for('intern'))
+	else:
+		return "Bad password"
+
 @app.route('/intern')
 def intern():
 	conn = db.conn()

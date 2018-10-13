@@ -6,8 +6,6 @@ import os
 
 from MySQLdb.cursors import DictCursor
 
-
-
 def make_conn():
    
 	parser = SafeConfigParser()
