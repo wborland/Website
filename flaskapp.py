@@ -7,7 +7,6 @@ import subprocess
 import os
 import glob
 import db
-import db.util
 import boto3
 
 app = Flask(__name__)
