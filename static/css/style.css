@@ -1,0 +1,91 @@
+:root {
+    --grey-white: #F8F7F2;
+}
+
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    margin: 0 0 70px;
+}
+
+div {
+    margin: 0px;
+}
+
+strong {
+    font-size: 2em;
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 70px;
+    width: 100%;
+    text-align: center;
+    color: #757575;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.top-pad{
+  padding-top: 3em;
+}
+
+.jumbo-pad{
+  padding-top: 2em;
+  padding-bottom: 1em;
+}
+
+.navbar {
+    border: 0;
+}
+
+.nav-link{
+  color: #FFFFFF !important;
+  font-size: 1.1em;
+}
+
+.btnblue {
+  -webkit-border-radius: 13;
+  -moz-border-radius: 13;
+  border-radius: 13px;
+  color: #ffffff;
+  font-size: 18px;
+  background: #007bff;
+  padding: 10px 20px 10px 20px;
+  font-family: 'Catamaran', sans-serif;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#space70 {
+    background-color: #307FE2;
+    margin-bottom: 0px;
+    color: var(--grey-white);
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+{% block head %}
+<head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119549461-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-119549461-1');
+        </script>
+  
+  <title>Will Borland</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+  <!--Bootstrap4 CSS-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!--Bootstrap4 Scripts-->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <!--Glyphcons-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+
+
+  <!--Personal CSS-->
+  <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+</head>
+{% endblock %}
+  <body>
+
+  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+    <a class="navbar-brand" href="/">Will</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/wborland" target="_blank">GitHub</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/resume" target="_blank">Resume</a>
+        </li>    
+      </ul>
+    </div>  
+  </nav>
+  <br>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+      <a href="https://www.linkedin.com/in/will-borland/" target="_blank"><i style="font-size:24px" class="fa">&#xf08c;</i></a>
+      <a href="https://github.com/wborland" target="_blank"><i style="font-size:24px" class="fa">&#xf09b;</i></a>
+      <a href="mailto:will@wborland.com" target="_top"><i style="font-size:24px" class="fa">&#xf0e0;</i></a>
+      <p> &copy; Will Borland</p>
+    </footer>
+  </body>
+</html>

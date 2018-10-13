@@ -1,0 +1,39 @@
+{% extends "bass.html" %}
+{% block content %}
+
+<div class="container-fluid">
+  <form action = "upload" method = "POST" enctype = "multipart/form-data">
+  	<div class="form-group row">
+      <div class="col-sm-6">
+          <label for="name">Company Name:</label>
+          <input type="text" class="form-control" name="name" required="">
+      </div>
+      <div class="col-sm-6">
+          <label for="position">Position:</label>
+          <input type="text" class="form-control" name="position" required="">
+      </div>
+  		
+  	</div>
+
+  	<div class="form-group">
+  		<div class="custom-file">
+   			<input id="test" type="file" class="custom-file-input btn" name="file" required="">
+   			<label for="test" class="custom-file-label text-truncate">Choose file...</label>
+		</div>
+  	</div>
+  	
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+
+<script type="text/javascript">
+	$('.custom-file-input').on('change', function() { 
+		let fileName = $(this).val().split('\\').pop(); 
+		$(this).next('.custom-file-label').addClass("selected").html(fileName); 
+	});
+</script>
+
+{% endblock %}
+
+

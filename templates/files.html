@@ -1,0 +1,38 @@
+{% extends "bass.html" %}
+{% block content %}
+
+
+<div class="container-fluid">
+  <form action = "upload" method = "POST" enctype = "multipart/form-data">
+    <div class="form-group">
+      <input type="file" class="btn" name = "file" />
+    </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<br>
+
+<div class="container-fluid">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Place</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+        <tr>
+          <th scope="row">{{ loop.index }}</th>
+          <td><a href="file/{{ file }}">{{ file }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+  <title>Intern</title>
+</head>
+
+{% extends "bass.html" %}
+{% block content %}
+
+<div class="container-fluid">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Place</th>
+        <th scope="col">Position</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+        
+          {% if file[5] == 2 %}
+            <tr style="background-color: #ff1a1a; opacity: 0.5">
+          {% elif file[5] == 1 %}
+            <tr style="background-color: #f4ee42">
+          {% else %}
+            <tr>
+          {% endif %}
+
+            <th scope="row">{{ loop.index }}</th>
+            <td><a href="/file/{{ file[2] }}" target="_blank">{{ file[1] }}</a></td>
+            <td style="width: 50%">{{ file[3] }}</td>
+            <td>{{ file[4] }}</td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
