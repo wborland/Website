@@ -1,8 +1,14 @@
-{% extends "admintemplate.html" %}
+{% extends "bass.html" %}
 {% block content %}
 
-<div style="background: blue">
-	
+<div class="container text-center">
+	<h2>Please put in the password</h2>
+
+	<form action = "loginCheck" method = "POST" enctype = "multipart/form-data">
+		<input type="password" name="password">
+		<input type="submit">
+	</form>
+
 </div>
 
 
