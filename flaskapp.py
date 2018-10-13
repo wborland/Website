@@ -48,7 +48,10 @@ def upload():
 
 @app.route('/admin')
 def admin():
-	return render_template('admin.html')
+	if 'intern' in session and session['intern'] == 'ok':
+		return render_template('admin.html')
+	else:
+		return redirect(url_for('login'))
 
 @app.route('/login')
 def login():
@@ -59,20 +62,24 @@ def loginCheck():
 	password = request.form["password"]
 
 	if password == "password":
+		session['intern'] = 'ok'
 		return redirect(url_for('intern'))
 	else:
 		return "Bad password"
 
 @app.route('/intern')
 def intern():
-	conn = db.conn()
-	cursor = conn.cursor()
-	md = """SELECT * from `website`.`intern`"""
-	cursor.execute(md)
-	conn.commit()
-	out = cursor.fetchall()
+	if 'intern' in session and session['intern'] == 'ok':
+		conn = db.conn()
+		cursor = conn.cursor()
+		md = """SELECT * from `website`.`intern`"""
+		cursor.execute(md)
+		conn.commit()
+		out = cursor.fetchall()
 
-	return render_template('intern.html', files=out)
+		return render_template('intern.html', files=out)
+	else:
+		return redirect(url_for('login'))
 
 @app.route('/favicon.ico')
 def favicon():
