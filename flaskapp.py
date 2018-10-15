@@ -10,7 +10,7 @@ import db
 import boto3
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = 'heos83yfbwl29&64n%2lkj'
 
 @app.route('/')
 def index():
