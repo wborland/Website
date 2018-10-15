@@ -8,6 +8,10 @@
 {% extends "bass.html" %}
 {% block content %}
 
+{% if error != None %}
+  <p>{{ error }}</p>
+{% endif %}
+
 <div class="container-fluid">
   <table class="table">
     <thead>

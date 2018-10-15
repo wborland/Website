@@ -24,7 +24,10 @@ def resume():
 def getFile(file):
 	thisFile = os.path.dirname(os.path.realpath(__file__)) + "/uploads/" + file
 
-	return send_file(thisFile)
+	if os.path.isfile(thisFile):
+		return send_file(thisFile)
+	else:
+		return render_template('fileNotFound.html')
 
 @app.route('/upload', methods = ['POST'])
 def upload():
@@ -67,8 +70,8 @@ def loginCheck():
 	else:
 		return "Bad password"
 
-@app.route('/intern')
-def intern():
+@app.route('/intern', defaults=({'error': None}))
+def intern(error):
 	if 'intern' in session and session['intern'] == 'ok':
 		conn = db.conn()
 		cursor = conn.cursor()
@@ -77,7 +80,7 @@ def intern():
 		conn.commit()
 		out = cursor.fetchall()
 
-		return render_template('intern.html', files=out)
+		return render_template('intern.html', files=out, error=error)
 	else:
 		return redirect(url_for('login'))
 
