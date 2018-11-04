@@ -36,6 +36,11 @@ footer {
     color: #757575;
 }
 
+iframe{
+    overflow: auto;
+    -webkit-overflow-scrolling:touch;
+}
+
 .text-center{
   text-align: center;
   text-align: -webkit-center;
