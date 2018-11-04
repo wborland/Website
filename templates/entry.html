@@ -7,13 +7,12 @@
 {% extends "bass.html" %}
 {% block content %}
 
-
 <div class="container">
 
         <h3>{{ entry[1] }}</h3>
         <h6>{{ entry[3] }}</h6>
 
-        <div id="textbox">
+        <div>
             <p class="alignleft">Status: {{ entry[4] }}</p>
 
             <form action='/updateStatus/1/{{ entry[0] }}' method="post">
@@ -24,9 +23,8 @@
                 <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
             </form>
         </div>
-
-
-
+        <br>
+        <br>
 </div>
 
 
@@ -47,6 +45,10 @@
 {% endif %}
 
 
+<div class="container">
+    <p>{{ error }}</p>
+    <p>{{ errorFile }}</p>
+</div>
 
 
 {% endblock %}
