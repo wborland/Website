@@ -11,6 +11,7 @@ body {
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     margin: 0 0 70px;
+    padding-top: 0px;
 }
 
 div {
@@ -19,6 +20,10 @@ div {
 
 strong {
     font-size: 2em;
+}
+
+h1{
+    display: inline-block;
 }
 
 footer {
@@ -33,6 +38,24 @@ footer {
 
 .text-center{
   text-align: center;
+  text-align: -webkit-center;
+}
+
+.text-left{
+    text-align: left;
+    text-align: -webkit-left;
+}
+
+.text-right{
+    text-align: right;
+    text-align: -webkit-right;
+}
+
+.alignleft {
+	float: left;
+}
+.alignright {
+	float: right;
 }
 
 .top-pad{
@@ -84,8 +107,13 @@ footer {
     display: block;
 }
 
+.btn-entry{
+    margin-right: 5px;
+}
 #space70 {
     background-color: #307FE2;
     margin-bottom: 0px;
     color: var(--grey-white);
 }
+
+

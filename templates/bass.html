@@ -31,26 +31,57 @@
 {% endblock %}
   <body>
 
-  <nav class="navbar navbar-expand-md bg-primary navbar-dark">
-    <a class="navbar-brand" href="/">Will</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/wborland" target="_blank">GitHub</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/resume" target="_blank">Resume</a>
-        </li>    
-      </ul>
-    </div>  
-  </nav>
-  <br>
+    {% if session['intern'] == 'ok' %}
+      <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+          <a class="navbar-brand" href="/">Will</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="https://github.com/wborland" target="_blank">GitHub</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/resume" target="_blank">Resume</a>
+                </li>  
+              <li class="nav-item">
+                <a class="nav-link" href="/intern">Intern</a>
+              </li>    
+            </ul>
+          </div>  
+        </nav>
+        <br>
+      {% else %}
+      <nav class="navbar navbar-expand-md bg-primary navbar-dark">
+          <a class="navbar-brand" href="/">Will</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="https://github.com/wborland" target="_blank">GitHub</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/resume" target="_blank">Resume</a>
+              </li>    
+            </ul>
+          </div>  
+        </nav>
+        <br>
 
-    {% block content %}
-    {% endblock %}
+        {% endif %}
+
+
+
+
+
+ 
+        {% block content %}
+        {% endblock %}
+
+
 
     <footer>
       <a href="https://www.linkedin.com/in/will-borland/" target="_blank"><i style="font-size:24px" class="fa">&#xf08c;</i></a>
