@@ -93,7 +93,7 @@ def entry(id):
 		cursor.execute(md)
 		conn.commit()
 		entry = cursor.fetchone()
-		thisFile = os.path.dirname(os.path.realpath(entry[2])) + "uploads/" + entry[2]
+		thisFile = os.path.dirname(os.path.realpath(__file__)) + "uploads/" + entry[2]
 
 		if os.path.isfile(thisFile):
 			return render_template('entry.html', entry=entry, file=thisFile)
