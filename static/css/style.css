@@ -39,6 +39,7 @@ footer {
 iframe{
     overflow: auto;
     -webkit-overflow-scrolling:touch;
+
 }
 
 .text-center{
