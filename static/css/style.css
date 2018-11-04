@@ -84,8 +84,14 @@ footer {
     display: block;
 }
 
+.intern{
+    
+}
+
 #space70 {
     background-color: #307FE2;
     margin-bottom: 0px;
     color: var(--grey-white);
 }
+
+
