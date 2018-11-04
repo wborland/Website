@@ -93,13 +93,17 @@ def entry(id):
 		cursor.execute(md)
 		conn.commit()
 		entry = cursor.fetchone()
+		thisFile = os.path.dirname(os.path.realpath(entry[2])) + "/uploads/" + entry[2]
 
-		return render_template('entry.html', entry=entry)
+		if os.path.isfile(thisFile):
+			return render_template('entry.html', entry=entry, file=thisFile)
+		else:
+			return render_template('entry.html', entry=entry, file=-1)
 	else:
 		return redirect(url_for('login'))
 
 
-@app.route('/update/<type>/<id>', methods = ['POST'])
+@app.route('/updateStatus/<type>/<id>', methods = ['POST'])
 def update(type, id):
 	if 'intern' in session and session['intern'] == 'ok':
 		conn = db.conn()
@@ -111,8 +115,6 @@ def update(type, id):
 		return redirect(url_for('intern'))
 	else:
 		return redirect(url_for('login'))
-
-
 
 
 @app.route('/favicon.ico')
