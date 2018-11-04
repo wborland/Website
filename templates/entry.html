@@ -33,7 +33,7 @@
     <br>
     <br>
     <br>
-        <div class="media">
+        <div class="media" style="overflow: auto; -webkit-overflow-scrolling: touch;">
                 <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900>
                     <p>It appears you don't have a PDF plugin for this browser.
                             No biggie... you can <a href="/file/{{ entry[2] }}">click here to
@@ -45,10 +45,6 @@
 {% endif %}
 
 
-<div class="container">
-    <p>{{ error }}</p>
-    <p>{{ errorFile }}</p>
-</div>
 
 
 {% endblock %}
