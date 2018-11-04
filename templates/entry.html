@@ -2,7 +2,6 @@
 <html lang="en"> 
 <head>
   <title>Intern</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 {% extends "bass.html" %}
@@ -34,7 +33,7 @@
     <br>
     <br>
     <br>
-    <!--
+
         <div class="media" style="overflow: auto; -webkit-overflow-scrolling: touch;">
                 <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900>
                     <p>It appears you don't have a PDF plugin for this browser.
@@ -42,9 +41,7 @@
                            download the PDF file.</a></p>  
                 </object>
         </div>
-    -->
 
-    <iframe src="/file/{{ entry[2] }}" width="100%" height="700" scrolling="no"></iframe>
 
         
 </div>
