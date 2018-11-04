@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <title>Intern</title>
+</head>
+
+{% extends "bass.html" %}
+{% block content %}
+
+
+<div class="container">
+
+        <h3>{{ entry[1] }}</h3>
+        <h6>{{ entry[3] }}</h6>
+
+        <div id="textbox">
+            <p class="alignleft">Status: {{ entry[4] }}</p>
+
+            <form action='/updateStatus/1/{{ entry[0] }}' method="post">
+                <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
+            </form>
+            
+            <form action='/updateStatus/2/{{ entry[0] }}' method="post">
+                <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
+            </form>
+        </div>
+
+
+
+</div>
+
+
+{% if file != -1 %}
+<div class="container">
+    <br>
+    <br>
+    <br>
+        <div class="media">
+                <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900>
+                    <p>It appears you don't have a PDF plugin for this browser.
+                            No biggie... you can <a href="/file/{{ entry[2] }}">click here to
+                           download the PDF file.</a></p>  
+                </object>
+        </div>
+        
+</div>
+{% endif %}
+
+
+
+
+{% endblock %}
+

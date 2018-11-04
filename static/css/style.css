@@ -35,6 +35,21 @@ footer {
   text-align: center;
 }
 
+.text-left{
+    text-align: left;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.alignleft {
+	float: left;
+}
+.alignright {
+	float: right;
+}
+
 .top-pad{
   padding-top: 3em;
 }
@@ -84,8 +99,13 @@ footer {
     display: block;
 }
 
+.btn-entry{
+    margin-right: 5px;
+}
 #space70 {
     background-color: #307FE2;
     margin-bottom: 0px;
     color: var(--grey-white);
 }
+
+

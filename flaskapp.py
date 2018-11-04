@@ -46,7 +46,6 @@ def upload():
 	cursor.execute(add_entry_cmd, [name, secure_filename(f.filename), position])
 	conn.commit()
 
-
 	return redirect(url_for('intern'))
 
 @app.route('/admin')
@@ -83,6 +82,40 @@ def intern(error):
 		return render_template('intern.html', files=out, error=error)
 	else:
 		return redirect(url_for('login'))
+
+
+@app.route('/entry/<id>')
+def entry(id):
+	if 'intern' in session and session['intern'] == 'ok':
+		conn = db.conn()
+		cursor = conn.cursor()
+		md = """SELECT * from `website`.`intern` WHERE id =""" + id
+		cursor.execute(md)
+		conn.commit()
+		entry = cursor.fetchone()
+		thisFile = os.path.dirname(os.path.realpath(entry[2])) + "/uploads/" + entry[2]
+
+		if os.path.isfile(thisFile):
+			return render_template('entry.html', entry=entry, file=thisFile)
+		else:
+			return render_template('entry.html', entry=entry, file=-1)
+	else:
+		return redirect(url_for('login'))
+
+
+@app.route('/updateStatus/<type>/<id>', methods = ['POST'])
+def update(type, id):
+	if 'intern' in session and session['intern'] == 'ok':
+		conn = db.conn()
+		cursor = conn.cursor()
+		md = """update website.intern set status_num = """ + type + """ where id = """ + id
+		cursor.execute(md)
+		conn.commit()
+
+		return redirect(url_for('intern'))
+	else:
+		return redirect(url_for('login'))
+
 
 @app.route('/favicon.ico')
 def favicon():
