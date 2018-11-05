@@ -11,9 +11,13 @@ import boto3
 
 app = Flask(__name__)
 secretKeyFile = os.path.dirname(os.path.realpath(__file__)) + "/../secretkey.txt"
+passwordFile = os.path.dirname(os.path.realpath(__file__)) + "/../pass.txt"
 
 with open(secretKeyFile, 'r') as myfile:
     app.secret_key = myfile.read().replace('\n', '')
+
+with open(passwordFile, 'r') as myfile:
+    internPassword = myfile.read().replace('\n', '')
 
 
 @app.route('/')
@@ -67,7 +71,7 @@ def login():
 def loginCheck():
 	password = request.form["password"]
 
-	if password == "password":
+	if password == internPassword:
 		session['intern'] = 'ok'
 		return redirect(url_for('intern'))
 	else:
@@ -102,7 +106,7 @@ def entry(id):
 		if os.path.isfile(thisFile):
 			return render_template('entry.html', entry=entry, file=thisFile)
 		else:
-			return render_template('entry.html', entry=entry, file=-1, error=os.path.isfile(thisFile), errorFile=thisFile)
+			return render_template('entry.html', entry=entry, file=-1, error=1)
 	else:
 		return redirect(url_for('login'))
 
