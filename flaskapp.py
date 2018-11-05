@@ -106,7 +106,7 @@ def entry(id):
 		if os.path.isfile(thisFile):
 			return render_template('entry.html', entry=entry, file=thisFile)
 		else:
-			return render_template('entry.html', entry=entry, file=-1, error=1)
+			return render_template('entry.html', entry=entry, file=-1)
 	else:
 		return redirect(url_for('login'))
 
