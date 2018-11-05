@@ -30,26 +30,19 @@
 
 {% if file != -1 %}
 <div class="container">
-    <br>
-    <br>
-    <br>
-
         <div class="media mobile" style="overflow: auto; -webkit-overflow-scrolling: touch;">
-                <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900>
-                    <p>It appears you don't have a PDF plugin for this browser.
-                            No biggie... you can <a target="__blank" href="/file/{{ entry[2] }}">click here to
-                           download the PDF file.</a></p>  
-                </object>
+            <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900></object>
         </div>
-
-
 
 </div>
 {% endif %}
 
-<div class="mobileShow">
-    <p class="text-center">Download the job posting <a href="/file/{{ entry[2] }}" target="_blank">here</a>.</p>  
-</div>
+
+    <p class="text-center mobileShow">Download the job posting <a href="/file/{{ entry[2] }}" target="_blank">here</a>.</p>  
+
+    {% if error == 1 %}
+        <p class="text-center">There is not job posting for this entry.</p>
+    {% endif %}
 
 
 {% endblock %}
