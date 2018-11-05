@@ -10,7 +10,11 @@ import db
 import boto3
 
 app = Flask(__name__)
-app.secret_key = 'heos83yfbwl29&64n%2lkj'
+secretKeyFile = os.path.dirname(os.path.realpath(__file__)) + "/../secretkey.txt"
+
+with open(secretKeyFile, 'r') as myfile:
+    app.secret_key = myfile.read().replace('\n', '')
+
 
 @app.route('/')
 def index():
