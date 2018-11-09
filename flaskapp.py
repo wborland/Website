@@ -125,6 +125,23 @@ def update(type, id):
 		return redirect(url_for('login'))
 
 
+@app.route('/editStatus', methods = ['POST'])
+def edit():
+	if 'intern' in session and session['intern'] == 'ok':
+		entry = request.form["entry"]
+		new = request.form["new"]
+		
+		conn = db.conn()
+		cursor = conn.cursor()
+		md = """update website.intern set status = \"""" + new + """\" where id = """ + entry
+
+		cursor.execute(md)
+		conn.commit()
+
+		return "Ok"
+	else:
+		return "Error"
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico')
