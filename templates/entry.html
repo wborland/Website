@@ -7,13 +7,36 @@
 {% extends "bass.html" %}
 {% block content %}
 
+<script>
+
+        function editStatus(){
+            console.log("Hello World")
+            var txt;
+            var statusText = prompt("Edit Status:", status);
+            if(statusText != null && statusText != ""){
+                document.getElementById("editStatus").innerHTML = 'Status: ' + statusText;
+
+                $.post("/editStatus",
+                {
+                    entry: "{{ entry[0] }}",
+                    new: statusText
+                });
+            }
+        }
+        
+        </script>
+
 <div class="container">
 
+
+        <button type="button" class="alignright btn btn-outline-dark" onClick="editStatus()">Edit</button>
         <h3>{{ entry[1] }}</h3>
         <h6>{{ entry[3] }}</h6>
 
         <div>
-            <p class="alignleft">Status: {{ entry[4] }}</p>
+            
+            <p id="editStatus" class="alignleft">Status: {{ entry[4] }}</p>
+ 
 
             {% if entry[5] == 0%}
                 <form action='/updateStatus/1/{{ entry[0] }}' method="post">
@@ -59,6 +82,11 @@
     <p class="text-center">There is no job posting for this entry.</p>
 {% endif %}
 
+<span class="alignleft glyphicon glyphicon-pencil"></span>
 
 {% endblock %}
+
+
+
+
 
