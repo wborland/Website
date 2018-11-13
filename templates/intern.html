@@ -12,9 +12,17 @@
   <p>{{ error }}</p>
 {% endif %}
 
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#intern').DataTable({
+      "lengthMenu": [[-1, 25, 50, 100], ["All", 25, 50, 100]]
+    });
+
+} );
+</script>
 
   <div class="table-responsive container-fluid">
-      <table class="table">
+      <table id="intern" class="table">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -52,4 +60,6 @@
 
 
 {% endblock %}
+
+
 
