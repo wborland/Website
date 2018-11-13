@@ -19,7 +19,6 @@ with open(secretKeyFile, 'r') as myfile:
 with open(passwordFile, 'r') as myfile:
     internPassword = myfile.read().replace('\n', '')
 
-
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -141,6 +140,11 @@ def edit():
 		return "Ok"
 	else:
 		return "Error"
+
+
+@app.route("/test")
+def test():
+	return render_template('test.html')
 
 @app.route('/favicon.ico')
 def favicon():
