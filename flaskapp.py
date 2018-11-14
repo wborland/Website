@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort
+from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response, json 
 from werkzeug import secure_filename
 from botocore.exceptions import ClientError
+from flasgger import Swagger
 
 import click
 import subprocess
@@ -10,19 +11,35 @@ import db
 import boto3
 
 app = Flask(__name__)
-secretKeyFile = os.path.dirname(os.path.realpath(__file__)) + "/../secretkey.txt"
-passwordFile = os.path.dirname(os.path.realpath(__file__)) + "/../pass.txt"
+Swagger(app)
 
-with open(secretKeyFile, 'r') as myfile:
+app.secretKeyFile = os.path.dirname(
+    os.path.realpath(__file__)) + "/../secretkey.txt"
+app.passwordFile = os.path.dirname(os.path.realpath(__file__)) + "/../pass.txt"
+
+with open(app.secretKeyFile, 'r') as myfile:
     app.secret_key = myfile.read().replace('\n', '')
 
-with open(passwordFile, 'r') as myfile:
+with open(app.passwordFile, 'r') as myfile:
     internPassword = myfile.read().replace('\n', '')
+
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+	"""
+    This is the index page
+    ---
 
+    responses:
+      501:
+        description: Server Error
+      200:
+	  	description: Index page
+
+
+    """
+	return render_template("index.html")
+	
 @app.route('/resume')
 def resume():
     return send_file("static/resume.pdf")
@@ -68,13 +85,36 @@ def login():
 
 @app.route('/loginCheck', methods = ['POST'])
 def loginCheck():
-	password = request.form["password"]
+	"""
+    Login check endpoint
+    ---
+    parameters:
+      - in: query
+        name: password
+    produces:
+      application/json
+    responses:
+		'200':
+			description: Correct password. User logged in
+		'400':
+			description: Invalid password
+		'401':
+			description: Password not found in request
+	 """
+	
+
+	if 'password' in request.form:
+		password = request.form["password"]
+	elif 'password' in request.args:
+		password = request.args["password"]
+	else:
+		return abort(401, 'Password not found in request.')
 
 	if password == internPassword:
 		session['intern'] = 'ok'
 		return redirect(url_for('intern'))
 	else:
-		return "Bad password"
+		return abort(400, 'Invalid Password')
 
 @app.route('/intern', defaults=({'error': None}))
 def intern(error):
