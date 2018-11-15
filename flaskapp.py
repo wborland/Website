@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response, json 
+from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response
 from werkzeug import secure_filename
 from botocore.exceptions import ClientError
 from flasgger import Swagger
