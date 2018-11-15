@@ -11,6 +11,14 @@ import db
 import boto3
 
 app = Flask(__name__)
+
+
+app.config['SWAGGER'] = {
+    'title': 'Wborland API',
+    'uiversion': 3,
+	'version': '1.0',
+	"specs_route": "/swagger/"
+}
 Swagger(app)
 
 app.secretKeyFile = os.path.dirname(
