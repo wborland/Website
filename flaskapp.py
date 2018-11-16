@@ -15,7 +15,7 @@ import boto3
 
 app = Flask(__name__)
 
-if os.environ.get('FLASK_ENG') is not None:
+if os.environ.get('FLASK_ENV') is not None:
 	if os.environ['FLASK_ENV'] == 'development':
 		app.config.update(
 			SESSION_COOKIE_SECURE=False,
@@ -207,7 +207,7 @@ def page_not_found(e):
 
 @app.after_request
 def addHeaders(response):
-	response.headers['Content-Security-Policy'] = "Content-Security-Policy: cookie-scope host default-src 'self'; "
+	response.headers['Content-Security-Policy'] = "Content-Security-Policy: cookie-scope host default-src https 'self'; "
 	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
 	return response
 
