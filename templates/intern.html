@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"> 
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+   
 <head>
 
   <title>Intern</title>
@@ -12,15 +12,6 @@
 {% if error != None %}
   <p>{{ error }}</p>
 {% endif %}
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('#intern').DataTable({
-      "lengthMenu": [[-1, 25, 50, 100], ["All", 25, 50, 100]]
-    });
-
-} );
-</script>
 
   <div class="table-responsive container-fluid">
       <table id="intern" class="table">
