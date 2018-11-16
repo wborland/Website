@@ -10,12 +10,28 @@ import glob
 import db
 import boto3
 
+
+
+
 app = Flask(__name__)
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Lax',
-)
+
+
+if os.environ['FLASK_ENV'] == 'development':
+	app.config.update(
+		SESSION_COOKIE_SECURE=False,
+		SESSION_COOKIE_HTTPONLY=False,
+		SESSION_COOKIE_SAMESITE='Lax',
+		PERMANENT_SESSION_LIFETIME=60,
+		)
+else:
+	app.config.update(
+		SESSION_COOKIE_SECURE=True,
+		SESSION_COOKIE_HTTPONLY=True,
+		SESSION_COOKIE_SAMESITE='Lax',
+		PERMANENT_SESSION_LIFETIME=600,
+	)
+
+
 app.config['SWAGGER'] = {
     'title': 'Wborland API',
     'uiversion': 3,
@@ -100,6 +116,7 @@ def login():
 				response = make_response(redirect(url_for(session['redirect'])))
 				session.pop('redirect', None)
 				session['intern'] = 'ok'
+				response.set_cookie('intern', 'ok', max_age=1000)
 				return response
 			else:
 				return redirect(url_for('index'))
@@ -190,7 +207,7 @@ def page_not_found(e):
 
 @app.after_request
 def addHeaders(response):
-	response.headers['Content-Security-Policy'] = "Content-Security-Policy: default-src 'self'; "
+	response.headers['Content-Security-Policy'] = "Content-Security-Policy: cookie-scope host default-src 'self'; "
 	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
 	return response
 
