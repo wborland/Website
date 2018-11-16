@@ -11,8 +11,11 @@ import db
 import boto3
 
 app = Flask(__name__)
-
-
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 app.config['SWAGGER'] = {
     'title': 'Wborland API',
     'uiversion': 3,
