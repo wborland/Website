@@ -186,7 +186,13 @@ def favicon():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html')
+	return render_template('404.html')
+
+@app.after_request
+def addHeaders(response):
+	response.headers['Content-Security-Policy'] = "Content-Security-Policy: default-src 'self'; "
+	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
+	return response
 
 if __name__ == '__main__':
   app.run(debug=True)
