@@ -15,7 +15,7 @@ import boto3
 
 app = Flask(__name__)
 
-if environget('FLASK_ENG') is not None:
+if os.environ.get('FLASK_ENG') is not None:
 	if os.environ['FLASK_ENV'] == 'development':
 		app.config.update(
 			SESSION_COOKIE_SECURE=False,
