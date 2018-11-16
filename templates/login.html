@@ -5,7 +5,7 @@
 	<h2>Please put in the password</h2>
 
 	<div class="form-group">
-		<form action = "loginCheck" method = "POST" enctype = "multipart/form-data">
+		<form action = "login" method = "POST" enctype = "multipart/form-data">
 			<div class="row">
 
 				<div class="col-sm-8">
@@ -16,17 +16,16 @@
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 
-
 			</div>
 
 
 		</form>
 	</div>
 
+	<p>{{ message }}</p>
+
 
 </div>
-
-
 
 
 {% endblock %}

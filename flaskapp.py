@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response
+from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response, make_response
 from werkzeug import secure_filename
 from botocore.exceptions import ClientError
 from flasgger import Swagger
@@ -10,7 +10,26 @@ import glob
 import db
 import boto3
 
+
+
+
 app = Flask(__name__)
+
+if os.environ.get('FLASK_ENG') is not None:
+	if os.environ['FLASK_ENV'] == 'development':
+		app.config.update(
+			SESSION_COOKIE_SECURE=False,
+			SESSION_COOKIE_HTTPONLY=False,
+			SESSION_COOKIE_SAMESITE='Lax',
+			PERMANENT_SESSION_LIFETIME=60,
+			)
+else:
+	app.config.update(
+		SESSION_COOKIE_SECURE=True,
+		SESSION_COOKIE_HTTPONLY=True,
+		SESSION_COOKIE_SAMESITE='Lax',
+		PERMANENT_SESSION_LIFETIME=600,
+	)
 
 
 app.config['SWAGGER'] = {
@@ -85,44 +104,27 @@ def admin():
 	if 'intern' in session and session['intern'] == 'ok':
 		return render_template('admin.html')
 	else:
+		session['redirect'] = 'admin'
 		return redirect(url_for('login'))
 
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-	return render_template('login.html')
-
-@app.route('/loginCheck', methods = ['POST'])
-def loginCheck():
-	"""
-    Login check endpoint
-    ---
-    parameters:
-      - in: query
-        name: password
-    produces:
-      application/json
-    responses:
-		'200':
-			description: Correct password. User logged in
-		'400':
-			description: Invalid password
-		'401':
-			description: Password not found in request
-	 """
-	
 
 	if 'password' in request.form:
-		password = request.form["password"]
-	elif 'password' in request.args:
-		password = request.args["password"]
+		if internPassword == request.form['password']:
+			if 'redirect' in session:
+				response = make_response(redirect(url_for(session['redirect'])))
+				session.pop('redirect', None)
+				session['intern'] = 'ok'
+				response.set_cookie('intern', 'ok', max_age=1000)
+				return response
+			else:
+				return redirect(url_for('index'))
+		else:
+			return render_template('login.html', message="Incorrect Password")
 	else:
-		return abort(401, 'Password not found in request.')
+		return render_template('login.html')
 
-	if password == internPassword:
-		session['intern'] = 'ok'
-		return redirect(url_for('intern'))
-	else:
-		return abort(400, 'Invalid Password')
 
 @app.route('/intern', defaults=({'error': None}))
 def intern(error):
@@ -136,6 +138,7 @@ def intern(error):
 
 		return render_template('intern.html', files=out, error=error)
 	else:
+		session['redirect'] = 'intern'
 		return redirect(url_for('login'))
 
 
@@ -200,7 +203,13 @@ def favicon():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html')
+	return render_template('404.html')
+
+@app.after_request
+def addHeaders(response):
+	response.headers['Content-Security-Policy'] = "Content-Security-Policy: cookie-scope host default-src 'self'; "
+	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
+	return response
 
 if __name__ == '__main__':
   app.run(debug=True)
