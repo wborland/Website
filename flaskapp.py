@@ -15,14 +15,14 @@ import boto3
 
 app = Flask(__name__)
 
-
-if os.environ['FLASK_ENV'] == 'development':
-	app.config.update(
-		SESSION_COOKIE_SECURE=False,
-		SESSION_COOKIE_HTTPONLY=False,
-		SESSION_COOKIE_SAMESITE='Lax',
-		PERMANENT_SESSION_LIFETIME=60,
-		)
+if environget('FLASK_ENG') is not None:
+	if os.environ['FLASK_ENV'] == 'development':
+		app.config.update(
+			SESSION_COOKIE_SECURE=False,
+			SESSION_COOKIE_HTTPONLY=False,
+			SESSION_COOKIE_SAMESITE='Lax',
+			PERMANENT_SESSION_LIFETIME=60,
+			)
 else:
 	app.config.update(
 		SESSION_COOKIE_SECURE=True,
