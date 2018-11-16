@@ -207,7 +207,7 @@ def page_not_found(e):
 
 @app.after_request
 def addHeaders(response):
-	response.headers['Content-Security-Policy'] = "cookie-scope host default-src https 'self';object-src 'self' https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com https://cdn.datatables.net https://ajax.googleapis.com; script-src: 'self'; frame-ancestors 'self'"
+	response.headers['Content-Security-Policy'] = "img-src 'self'; cookie-scope host; object-src 'self'; script-src: https://www.googletagmanager.com 'self'; frame-ancestors 'self'; style-src 'self' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.datatables.net https://code.jquery.com https://maxcdn.bootstrapcdn.com https://use.fontawesome.com"
 	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
 	response.headers['X-Frame-Options'] = "SAMEORIGIN"
 	return response
