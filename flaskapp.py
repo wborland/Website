@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response
+from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response, make_response
 from werkzeug import secure_filename
 from botocore.exceptions import ClientError
 from flasgger import Swagger
@@ -85,44 +85,26 @@ def admin():
 	if 'intern' in session and session['intern'] == 'ok':
 		return render_template('admin.html')
 	else:
+		session['redirect'] = 'admin'
 		return redirect(url_for('login'))
 
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-	return render_template('login.html')
-
-@app.route('/loginCheck', methods = ['POST'])
-def loginCheck():
-	"""
-    Login check endpoint
-    ---
-    parameters:
-      - in: query
-        name: password
-    produces:
-      application/json
-    responses:
-		'200':
-			description: Correct password. User logged in
-		'400':
-			description: Invalid password
-		'401':
-			description: Password not found in request
-	 """
-	
 
 	if 'password' in request.form:
-		password = request.form["password"]
-	elif 'password' in request.args:
-		password = request.args["password"]
+		if internPassword == request.form['password']:
+			if 'redirect' in session:
+				response = make_response(redirect(url_for(session['redirect'])))
+				session.pop('redirect', None)
+				session['intern'] = 'ok'
+				return response
+			else:
+				return redirect(url_for('index'))
+		else:
+			return render_template('login.html', message="Incorrect Password")
 	else:
-		return abort(401, 'Password not found in request.')
+		return render_template('login.html')
 
-	if password == internPassword:
-		session['intern'] = 'ok'
-		return redirect(url_for('intern'))
-	else:
-		return abort(400, 'Invalid Password')
 
 @app.route('/intern', defaults=({'error': None}))
 def intern(error):
@@ -136,6 +118,7 @@ def intern(error):
 
 		return render_template('intern.html', files=out, error=error)
 	else:
+		session['redirect'] = 'intern'
 		return redirect(url_for('login'))
 
 
