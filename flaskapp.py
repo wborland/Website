@@ -23,6 +23,7 @@ if os.environ.get('FLASK_ENV') is not None:
 			SESSION_COOKIE_SAMESITE='Lax',
 			PERMANENT_SESSION_LIFETIME=60,
 			)
+		print("Hello World")
 else:
 	app.config.update(
 		SESSION_COOKIE_SECURE=True,
