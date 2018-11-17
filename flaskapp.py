@@ -24,6 +24,7 @@ if os.environ.get('FLASK_ENV') is not None:
 			PERMANENT_SESSION_LIFETIME=60,
 			)
 		print("Hello World")
+		f= open("log.txt","w+")
 else:
 	app.config.update(
 		SESSION_COOKIE_SECURE=True,
@@ -117,9 +118,14 @@ def login():
 				response = make_response(redirect(url_for(session['redirect'])))
 				session.pop('redirect', None)
 				session['intern'] = 'ok'
-				response.set_cookie('intern', 'ok', max_age=1000)
+
+				f.write("Logged in with redirect")
+				f.close()
 				return response
 			else:
+				f.write("Logged in without redirect")
+				f.close()
+				session['intern'] = 'ok'
 				return redirect(url_for('index'))
 		else:
 			return render_template('login.html', message="Incorrect Password")
