@@ -102,7 +102,7 @@ def admin():
 def login():
 
 	if 'password' in request.form:
-		if internPassword == request.form['password']:
+		if app.config['PASSWORD'] == request.form['password']:
 			if 'redirect' in session:
 				response = make_response(redirect(url_for(session['redirect'])))
 				session.pop('redirect', None)
