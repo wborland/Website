@@ -14,7 +14,9 @@ import boto3
 
 
 app = Flask(__name__)
+app.config.from_pyfile('../config.cfg')
 
+'''
 if os.environ.get('FLASK_ENV') is not None:
 	if os.environ['FLASK_ENV'] == 'development':
 		app.config.update(
@@ -32,25 +34,12 @@ else:
 		SESSION_COOKIE_SAMESITE='Lax',
 		PERMANENT_SESSION_LIFETIME=600,
 	)
+'''
 
 
-app.config['SWAGGER'] = {
-    'title': 'Wborland API',
-    'uiversion': 3,
-	'version': '1.0',
-	"specs_route": "/swagger/"
-}
-Swagger(app)
+if 'SWAGGER' in app.config:
+	Swagger(app)
 
-app.secretKeyFile = os.path.dirname(
-    os.path.realpath(__file__)) + "/../secretkey.txt"
-app.passwordFile = os.path.dirname(os.path.realpath(__file__)) + "/../pass.txt"
-
-with open(app.secretKeyFile, 'r') as myfile:
-    app.secret_key = myfile.read().replace('\n', '')
-
-with open(app.passwordFile, 'r') as myfile:
-    internPassword = myfile.read().replace('\n', '')
 
 
 @app.route('/')
@@ -118,13 +107,8 @@ def login():
 				response = make_response(redirect(url_for(session['redirect'])))
 				session.pop('redirect', None)
 				session['intern'] = 'ok'
-
-				f.write("Logged in with redirect")
-				f.close()
 				return response
 			else:
-				f.write("Logged in without redirect")
-				f.close()
 				session['intern'] = 'ok'
 				return redirect(url_for('index'))
 		else:
