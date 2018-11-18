@@ -14,7 +14,9 @@ import boto3
 
 
 app = Flask(__name__)
+app.config.from_pyfile('../config.cfg')
 
+'''
 if os.environ.get('FLASK_ENV') is not None:
 	if os.environ['FLASK_ENV'] == 'development':
 		app.config.update(
@@ -23,6 +25,8 @@ if os.environ.get('FLASK_ENV') is not None:
 			SESSION_COOKIE_SAMESITE='Lax',
 			PERMANENT_SESSION_LIFETIME=60,
 			)
+		print("Hello World")
+		f= open("log.txt","w+")
 else:
 	app.config.update(
 		SESSION_COOKIE_SECURE=True,
@@ -30,25 +34,12 @@ else:
 		SESSION_COOKIE_SAMESITE='Lax',
 		PERMANENT_SESSION_LIFETIME=600,
 	)
+'''
 
 
-app.config['SWAGGER'] = {
-    'title': 'Wborland API',
-    'uiversion': 3,
-	'version': '1.0',
-	"specs_route": "/swagger/"
-}
-Swagger(app)
+if 'SWAGGER' in app.config:
+	Swagger(app)
 
-app.secretKeyFile = os.path.dirname(
-    os.path.realpath(__file__)) + "/../secretkey.txt"
-app.passwordFile = os.path.dirname(os.path.realpath(__file__)) + "/../pass.txt"
-
-with open(app.secretKeyFile, 'r') as myfile:
-    app.secret_key = myfile.read().replace('\n', '')
-
-with open(app.passwordFile, 'r') as myfile:
-    internPassword = myfile.read().replace('\n', '')
 
 
 @app.route('/')
@@ -111,14 +102,14 @@ def admin():
 def login():
 
 	if 'password' in request.form:
-		if internPassword == request.form['password']:
+		if app.config['PASSWORD'] == request.form['password']:
 			if 'redirect' in session:
 				response = make_response(redirect(url_for(session['redirect'])))
 				session.pop('redirect', None)
 				session['intern'] = 'ok'
-				response.set_cookie('intern', 'ok', max_age=1000)
 				return response
 			else:
+				session['intern'] = 'ok'
 				return redirect(url_for('index'))
 		else:
 			return render_template('login.html', message="Incorrect Password")
