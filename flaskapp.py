@@ -184,6 +184,83 @@ def edit():
 		return "Error"
 
 
+@app.route('/quiz/science')
+def science():
+	science = {
+		"Which kind of waves are used to make and receive cellphone calls?" : [
+			"Radio waves",
+			"Visible light waves",
+			"Sound waves",
+			"Gravity waves"
+		],
+		"What does a light-year measure?" : [
+			"Distance",
+			"Brightness",
+			"Time",
+			"Weight"
+		],
+		"hypothesis": [
+			"A proposed, scientifically testable explanation for an observed phenomenon.",
+			"Information that has been objectively verified through direct observation",
+			"A concept based on scientific laws and axioms (rules assumed to be true and valid) where general agreement is present.",
+			"The combination of components and processes that serve a common function."
+		]
+
+	}
+
+	return jsonify(science)
+
+@app.route('/quiz/trivia')
+def trivia():
+	trivia = {
+		"Who directed Star Wars?" : [
+			"George Lucas",
+			"Steven Spielberg",
+			"Robert Zemeckis",
+			"Francis Ford Coppola"
+		],
+		"What is a group of Crows called?" : [
+			"Murder",
+			"Flock",
+			"Swarm",
+			"Gaggle"
+		],
+		"What is Earth's largest continent?" : [
+			"Asia",
+			"North America",
+			"Africa",
+			"Antarctica"
+		]
+	}
+
+	return jsonify(trivia)
+
+
+@app.route("/quiz/math")
+def math():
+	math = {
+		"What is the area of a triangle with sides 13 and 8" : [
+			"52",
+			"64",
+			"48",
+			"71"
+		],
+		"What is 20 percent off of 30 dollars?" : [
+			"$6",
+			"$10",
+			"$7",
+			"$5"
+		],
+		"30 is 60% of what number?" : [
+			"50",
+			"55",
+			"45",
+			"60"
+		]
+	}
+
+	return jsonify(math)
+
 @app.route("/test")
 def test():
 	return render_template('test.html')
