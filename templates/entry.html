@@ -7,35 +7,37 @@
 {% extends "bass.html" %}
 {% block content %}
 
-<script>
+<script type="text/javascript" nonce="c3lzdGVtc2dvZA">
 
-        function editStatus(){
-            console.log("Hello World")
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('editStatus').addEventListener('click', function editStatus() { 
+    console.log("Hello World")
             var txt;
             var statusText = prompt("Edit Status:", status);
             if(statusText != null && statusText != ""){
-                document.getElementById("editStatus").innerHTML = 'Status: ' + statusText;
+                document.getElementById("editStatusText").innerHTML = 'Status: ' + statusText;
 
                 $.post("/editStatus",
                 {
                     entry: "{{ entry[0] }}",
                     new: statusText
                 });
-            }
-        }
+            } 
+    });
+});
         
         </script>
 
 <div class="container">
 
 
-        <button type="button" class="alignright btn btn-outline-dark" onClick="editStatus()">Edit</button>
+        <button type="button" class="alignright btn btn-outline-dark" id="editStatus">Edit</button>
         <h3>{{ entry[1] }}</h3>
         <h6>{{ entry[3] }}</h6>
 
         <div>
             
-            <p id="editStatus" class="alignleft">Status: {{ entry[4] }}</p>
+            <p id="editStatusText" class="alignleft">Status: {{ entry[4] }}</p>
  
 
             {% if entry[5] == 0%}
