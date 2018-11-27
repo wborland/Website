@@ -17,7 +17,7 @@ jobs:
 
     working_directory: ~/flaskapp
 
-    enviornment: 
+    environment:
       SESSION_COOKIE_SECURE: False
       SESSION_COOKIE_HTTPONLY: False
       SESSION_COOKIE_SAMESITE: 'Lax'

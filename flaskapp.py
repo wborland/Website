@@ -18,27 +18,14 @@ app = Flask(__name__)
 
 if os.environ.get('circle') is None:
 	app.config.from_pyfile('config.cfg')
-
-
-'''
-if os.environ.get('FLASK_ENV') is not None:
-	if os.environ['FLASK_ENV'] == 'development':
-		app.config.update(
-			SESSION_COOKIE_SECURE=False,
-			SESSION_COOKIE_HTTPONLY=False,
-			SESSION_COOKIE_SAMESITE='Lax',
-			PERMANENT_SESSION_LIFETIME=60,
-			)
-		print("Hello World")
-		f= open("log.txt","w+")
 else:
 	app.config.update(
-		SESSION_COOKIE_SECURE=True,
-		SESSION_COOKIE_HTTPONLY=True,
+		SESSION_COOKIE_SECURE=False,
+		SESSION_COOKIE_HTTPONLY=False,
 		SESSION_COOKIE_SAMESITE='Lax',
-		PERMANENT_SESSION_LIFETIME=600,
-	)
-'''
+		PERMANENT_SESSION_LIFETIME=60,
+		)
+	app.config['PASSWORD'] = os.environ.get('PASSWORD')
 
 
 if 'SWAGGER' in app.config:
