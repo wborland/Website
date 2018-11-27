@@ -6,3 +6,5 @@ marshmallow
 nose2
 Pillow
 PyJWT
+pytest
+werkzeug

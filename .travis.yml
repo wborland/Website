@@ -2,7 +2,6 @@
 sudo: false  # http://docs.travis-ci.com/user/migrating-from-legacy/
 language: python
 python:
-  - 2.7
   - 3.4
   - 3.5
   - 3.6
@@ -11,4 +10,4 @@ before_script:
   - export FLASK_APP="$TRAVIS_BUILD_DIR/flaskapp.py"
   - export FLASK_DEBUG=1
 
-script: flask run
+script: nose2 -v
