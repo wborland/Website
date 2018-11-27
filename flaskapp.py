@@ -1,51 +1,31 @@
-from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, abort, jsonify, Blueprint, Response, make_response
-from werkzeug import secure_filename
-from botocore.exceptions import ClientError
+from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, jsonify, Response, make_response
+from werkzeug.utils import secure_filename
 from flasgger import Swagger
-
-import click
-import subprocess
 import os
-import glob
 import db
-import boto3
-
-
-
 
 app = Flask(__name__)
 
-
 if os.environ.get('circle') is None:
-	app.config.from_pyfile('config.cfg')
+	app.config.from_pyfile('../config.cfg')
 else:
-	app.config.update(
-		SESSION_COOKIE_SECURE=False,
-		SESSION_COOKIE_HTTPONLY=False,
-		SESSION_COOKIE_SAMESITE='Lax',
-		PERMANENT_SESSION_LIFETIME=60,
-		)
 	app.config['PASSWORD'] = os.environ.get('PASSWORD')
+	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 
 if 'SWAGGER' in app.config:
 	Swagger(app)
 
-
-
 @app.route('/')
 def index():
 	"""
-    This is the index page
+	This is the index page
     ---
-
     responses:
       501:
         description: Server Error
       200:
 	  	description: Index page
-
-
     """
 	return render_template("index.html")
 	
