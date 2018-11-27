@@ -34,6 +34,7 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
             sudo pip install nose2
+            sudo pip install Flask
 
       - save_cache:
           paths:
