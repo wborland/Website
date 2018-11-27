@@ -15,7 +15,24 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: /
+    working_directory: ~/flaskapp
+
+    enviornment: 
+      SESSION_COOKIE_SECURE: False
+      SESSION_COOKIE_HTTPONLY: False
+      SESSION_COOKIE_SAMESITE: 'Lax'
+      PERMANENT_SESSION_LIFETIME: 60
+      PASSWORD: 'borland'
+      DEBUG: True
+      TESTING: True
+      SECRET_KEY: 'asdflki45728lsa*3F92lklHF^30%*A@kljf28'
+      SWAGGER: {
+          'title': 'Wborland API',
+          'uiversion': 3,
+        'version': '1.0',
+        "specs_route": "/swagger/"
+      }
+      circle: True
 
     steps:
       - checkout

@@ -14,7 +14,11 @@ import boto3
 
 
 app = Flask(__name__)
-app.config.from_pyfile('../config.cfg')
+
+
+if os.environ.get('circle') is None or os.environ.get('circle') != '1':
+	app.config.from_pyfile('../config.cfg')
+
 
 '''
 if os.environ.get('FLASK_ENV') is not None:
