@@ -10,20 +10,10 @@ jobs:
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.6.1
         environment:
-          SESSION_COOKIE_SECURE: False
-          SESSION_COOKIE_HTTPONLY: False
-          SESSION_COOKIE_SAMESITE: 'Lax'
-          PERMANENT_SESSION_LIFETIME: 60
-          PASSWORD: 'borland'
+          PASSWORD: 'password'
           DEBUG: True
           TESTING: True
-          SECRET_KEY: 'asdflki45728lsa*3F92lklHF^30%*A@kljf28'
-          SWAGGER: {
-              'title': 'Wborland API',
-              'uiversion': 3,
-            'version': '1.0',
-            "specs_route": "/swagger/"
-          }
+          SECRET_KEY: 'badkey'
           circle: 1
           
       # Specify service dependencies here if necessary
