@@ -32,7 +32,7 @@ jobs:
         'version': '1.0',
         "specs_route": "/swagger/"
       }
-      circle: True
+      circle: 1
 
     steps:
       - checkout
