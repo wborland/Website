@@ -8,4 +8,4 @@ Pillow
 PyJWT
 pytest
 werkzeug
-MySQLdb
+mysqlclient
