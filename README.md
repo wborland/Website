@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/wborland/Website.svg?style=shield)](https://circleci.com/gh/wborland/Website)
+[![CircleCI](https://circleci.com/gh/wborland/Website.svg?style=shield&circle-token=bec3ee6788501faf8833f9d93de80e543678d51b)](https://circleci.com/gh/wborland/Website)
 
 # Website
 
