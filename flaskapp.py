@@ -3,6 +3,9 @@ from werkzeug.utils import secure_filename
 from flasgger import Swagger
 import os
 import db
+import boto3
+
+import datetime
 
 app = Flask(__name__)
 
@@ -15,6 +18,17 @@ else:
 
 if 'SWAGGER' in app.config:
 	Swagger(app)
+
+
+
+@app.route('/s3')
+def s3():
+	s3 = boto3.resource('s3')
+
+	data = open('Will_Borland_Resume.pdf', 'rb')
+	s3.Bucket(app.config['S3UPLOAD']).put_object(Key=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), Body=data)
+
+	return "Good"
 
 @app.route('/')
 def index():
