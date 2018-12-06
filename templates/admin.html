@@ -17,22 +17,21 @@
 
   	<div class="form-group">
   		<div class="custom-file">
-   			<input id="test" type="file" class="custom-file-input btn" name="file" required="">
-   			<label for="test" class="custom-file-label text-truncate">Choose file...</label>
+   			<input id="file-upload" type="file" class="custom-file-input btn" name="file" required="">
+			<label id="file-name" class="custom-file-label text-truncate">Choose file...</label>	   
 		</div>
   	</div>
   	
     <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+
+
+
+</form>
 </div>
 
 
-<script type="text/javascript">
-	$('.custom-file-input').on('change', function() { 
-		let fileName = $(this).val().split('\\').pop(); 
-		$(this).next('.custom-file-label').addClass("selected").html(fileName); 
-	});
-</script>
+
+
 
 {% endblock %}
 
