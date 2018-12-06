@@ -137,4 +137,7 @@ footer {
     color: var(--grey-white);
 }
 
-
+#media {
+    overflow: auto; 
+    -webkit-overflow-scrolling: touch;
+}

@@ -3,6 +3,9 @@ from werkzeug.utils import secure_filename
 from flasgger import Swagger
 import os
 import db
+import boto3
+import uuid
+import datetime
 
 app = Flask(__name__)
 
@@ -15,6 +18,15 @@ else:
 
 if 'SWAGGER' in app.config:
 	Swagger(app)
+
+@app.route('/s3')
+def s3():
+	s3 = boto3.resource('s3')
+
+	data = open('Will_Borland_Resume.pdf', 'rb')
+	s3.Bucket(app.config['S3UPLOAD']).put_object(Key=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), Body=data)
+
+	return "Good"
 
 @app.route('/')
 def index():
@@ -33,31 +45,22 @@ def index():
 def resume():
     return send_file("static/resume.pdf")
 
-@app.route('/file/<file>')
-def getFile(file):
-	thisFile = os.path.dirname(os.path.realpath(__file__)) + "/uploads/" + file
-
-	if os.path.isfile(thisFile):
-		return send_file(thisFile)
-	else:
-		return render_template('fileNotFound.html')
-
 @app.route('/upload', methods = ['POST'])
 def upload():
-	uploadDir = os.path.dirname(os.path.realpath(__file__))
-
-	name = request.form["name"]
-	position = request.form["position"]
-	print(position)
-
+	s3 = boto3.resource('s3')
 	f = request.files['file']
-	f.save(uploadDir + "/uploads/" + secure_filename(f.filename))
-	add_entry_cmd = """ INSERT INTO `website`.`intern` (`name`, `file`, `position`) VALUES (%s, %s, %s);"""
+	name = request.form['name']
+	position = request.form["position"]
 
+	fileName =  str(uuid.uuid4()) + "." + f.filename.rsplit('.', 1)[1].lower()
+	s3.Bucket(app.config['S3UPLOAD']).put_object(Key=fileName, Body=f)
+
+	add_entry_cmd = """ INSERT INTO `website`.`intern` (`name`, `file`, `position`) VALUES (%s, %s, %s);"""
 	conn = db.conn()
 	cursor = conn.cursor()
-	cursor.execute(add_entry_cmd, [name, secure_filename(f.filename), position])
+	cursor.execute(add_entry_cmd, [name, fileName, position])
 	conn.commit()
+
 
 	return redirect(url_for('intern'))
 
@@ -113,14 +116,27 @@ def entry(id):
 		cursor.execute(md)
 		conn.commit()
 		entry = cursor.fetchone()
-		thisFile = os.path.dirname(os.path.realpath(__file__)) + "/uploads/" + entry[2]
 
-		if os.path.isfile(thisFile):
-			return render_template('entry.html', entry=entry, file=thisFile)
+		if os.path.isfile(app.config['FILEPATH'] + entry[2]):
+			return render_template('entry.html', entry=entry, file=entry[2])
 		else:
-			return render_template('entry.html', entry=entry, file=-1)
+			try:
+				s3 = boto3.resource('s3')
+				s3.Bucket(app.config['S3UPLOAD']).download_file(entry[2], app.config['FILEPATH'] + entry[2])
+				return render_template('entry.html', entry=entry, file=entry[2])
+			except:
+				return render_template('entry.html', entry=entry, file=-1)
 	else:
 		return redirect(url_for('login'))
+
+
+@app.route('/file/<file>')
+def getFile(file):
+
+	if os.path.isfile(app.config['FILEPATH'] + file):
+		return send_file(app.config['FILEPATH'] + file)
+	else:
+		return render_template('404.html')
 
 
 @app.route('/updateStatus/<type>/<id>', methods = ['POST'])
