@@ -248,9 +248,9 @@ def math():
 
 	return jsonify(math)
 
-@app.route("/test")
-def test():
-	return render_template('test.html')
+@app.route("/robots.txt")
+def robots():
+	return send_from_directory(os.path.join(app.root_path, 'static'), 'robots.txt')
 
 @app.route('/favicon.ico')
 def favicon():
@@ -265,7 +265,8 @@ def addHeaders(response):
 	response.headers['Content-Security-Policy'] = "object-src 'self';script-src 'nonce-c3lzdGVtc2dvZA' https://ajax.googleapis.com https://www.googletagmanager.com https://code.jquery.com https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdn.datatables.net 'self' ; frame-ancestors 'self'; style-src 'self' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.datatables.net https://code.jquery.com https://maxcdn.bootstrapcdn.com https://use.fontawesome.com; font-src https://cdnjs.cloudflare.com https://use.fontawesome.com 'self'"
 	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
 	response.headers['X-Frame-Options'] = "SAMEORIGIN"
+	response.headers['Cache-Control'] = "max-age=172800"
 	return response
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(threaded=True, processes=4)
