@@ -6,6 +6,9 @@ import db
 import boto3
 import uuid
 import datetime
+import pdfkit
+import requests
+import threading
 
 app = Flask(__name__)
 
@@ -171,82 +174,31 @@ def edit():
 		return "Error"
 
 
-@app.route('/quiz/science')
-def science():
-	science = {
-		"Which kind of waves are used to make and receive cellphone calls?" : [
-			"Radio waves",
-			"Visible light waves",
-			"Sound waves",
-			"Gravity waves"
-		],
-		"What does a light-year measure?" : [
-			"Distance",
-			"Brightness",
-			"Time",
-			"Weight"
-		],
-		"hypothesis": [
-			"A proposed, scientifically testable explanation for an observed phenomenon.",
-			"Information that has been objectively verified through direct observation",
-			"A concept based on scientific laws and axioms (rules assumed to be true and valid) where general agreement is present.",
-			"The combination of components and processes that serve a common function."
-		]
+@app.route("/test")
+def test():
+	thread = threading.Thread(target=processesPage, args=('https://arriscareers.taleo.net/careersection/ex/jobdetail.ftl?job=18002563&tz=GMT-05:00',))
+	thread.start()
 
+	
+	
+	return "HELLO"
+
+
+def processesPage(url):
+	r = requests.get(url)
+
+	options = {
+		'encoding': "UTF-8",
+		'images': None,
+		'enable-forms': None,
+		'enable-plugins': None,
+		'print-media-type': None
 	}
 
-	return jsonify(science)
+	pdfkit.from_url(url, 'out.pdf', options=options)
 
-@app.route('/quiz/trivia')
-def trivia():
-	trivia = {
-		"Who directed Star Wars?" : [
-			"George Lucas",
-			"Steven Spielberg",
-			"Robert Zemeckis",
-			"Francis Ford Coppola"
-		],
-		"What is a group of Crows called?" : [
-			"Murder",
-			"Flock",
-			"Swarm",
-			"Gaggle"
-		],
-		"What is Earth's largest continent?" : [
-			"Asia",
-			"North America",
-			"Africa",
-			"Antarctica"
-		]
-	}
+	print("DONE")
 
-	return jsonify(trivia)
-
-
-@app.route("/quiz/math")
-def math():
-	math = {
-		"What is the area of a triangle with sides 13 and 8" : [
-			"52",
-			"64",
-			"48",
-			"71"
-		],
-		"What is 20 percent off of 30 dollars?" : [
-			"$6",
-			"$10",
-			"$7",
-			"$5"
-		],
-		"30 is 60% of what number?" : [
-			"50",
-			"55",
-			"45",
-			"60"
-		]
-	}
-
-	return jsonify(math)
 
 @app.route("/robots.txt")
 def robots():

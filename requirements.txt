@@ -9,3 +9,4 @@ PyJWT
 pytest
 werkzeug
 mysqlclient
+pdfkit
