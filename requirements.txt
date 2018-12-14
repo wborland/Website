@@ -10,3 +10,4 @@ pytest
 werkzeug
 mysqlclient
 pdfkit
+requests
