@@ -179,8 +179,6 @@ def test():
 	thread = threading.Thread(target=processesPage, args=('https://arriscareers.taleo.net/careersection/ex/jobdetail.ftl?job=18002563&tz=GMT-05:00',))
 	thread.start()
 
-	
-	
 	return "HELLO"
 
 
