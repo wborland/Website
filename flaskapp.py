@@ -2,13 +2,14 @@ from flask import Flask, render_template, request, send_file, send_from_director
 from werkzeug.utils import secure_filename
 from flasgger import Swagger
 import os
-import db
+import db.util
 import boto3
 import uuid
 import datetime
 import pdfkit
 import requests
 import threading
+import auth
 
 app = Flask(__name__)
 
@@ -18,18 +19,8 @@ else:
 	app.config['PASSWORD'] = os.environ.get('PASSWORD')
 	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
-
 if 'SWAGGER' in app.config:
 	Swagger(app)
-
-@app.route('/s3')
-def s3():
-	s3 = boto3.resource('s3')
-
-	data = open('Will_Borland_Resume.pdf', 'rb')
-	s3.Bucket(app.config['S3UPLOAD']).put_object(Key=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), Body=data)
-
-	return "Good"
 
 @app.route('/')
 def index():
@@ -49,6 +40,7 @@ def resume():
     return send_file("static/resume.pdf")
 
 @app.route('/upload', methods = ['POST'])
+@auth.required
 def upload():
 	s3 = boto3.resource('s3')
 	f = request.files['file']
@@ -58,82 +50,65 @@ def upload():
 	fileName =  str(uuid.uuid4()) + "." + f.filename.rsplit('.', 1)[1].lower()
 	s3.Bucket(app.config['S3UPLOAD']).put_object(Key=fileName, Body=f)
 
-	add_entry_cmd = """ INSERT INTO `website`.`intern` (`name`, `file`, `position`) VALUES (%s, %s, %s);"""
-	conn = db.conn()
-	cursor = conn.cursor()
-	cursor.execute(add_entry_cmd, [name, fileName, position])
-	conn.commit()
-
+	db.util.addEntry(name, fileName, position)
 
 	return redirect(url_for('intern'))
 
 @app.route('/admin')
+@auth.required
 def admin():
-	if 'intern' in session and session['intern'] == 'ok':
 		return render_template('admin.html')
-	else:
-		session['redirect'] = 'admin'
-		return redirect(url_for('login'))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
 
 	if 'password' in request.form:
 		if app.config['PASSWORD'] == request.form['password']:
+			session['intern'] = 'ok'
+
 			if 'redirect' in session:
-				response = make_response(redirect(url_for(session['redirect'])))
+				url = session['redirect']
 				session.pop('redirect', None)
-				session['intern'] = 'ok'
-				return response
+				return redirect(url_for(url))
+
 			else:
-				session['intern'] = 'ok'
 				return redirect(url_for('index'))
+
 		else:
 			return render_template('login.html', message="Incorrect Password")
+
 	else:
 		return render_template('login.html')
 
 
 @app.route('/intern', defaults=({'error': None}))
+@auth.required
 def intern(error):
-	if 'intern' in session and session['intern'] == 'ok':
-		conn = db.conn()
-		cursor = conn.cursor()
-		md = """SELECT * from `website`.`intern`"""
-		cursor.execute(md)
-		conn.commit()
-		out = cursor.fetchall()
+	out = db.util.queryAll("""SELECT * from `website`.`intern`""")
+	return render_template('intern.html', files=out, error=error)
 
-		return render_template('intern.html', files=out, error=error)
-	else:
-		session['redirect'] = 'intern'
-		return redirect(url_for('login'))
 
 
 @app.route('/entry/<id>')
+@auth.required
 def entry(id):
-	if 'intern' in session and session['intern'] == 'ok':
-		conn = db.conn()
-		cursor = conn.cursor()
-		md = """SELECT * from `website`.`intern` WHERE id =""" + id
-		cursor.execute(md)
-		conn.commit()
-		entry = cursor.fetchone()
+	entry = db.util.queryOne("""SELECT * from `website`.`intern` WHERE id =""" + id)
 
-		if os.path.isfile(app.config['FILEPATH'] + entry[2]):
-			return render_template('entry.html', entry=entry, file=entry[2])
-		else:
-			try:
-				s3 = boto3.resource('s3')
-				s3.Bucket(app.config['S3UPLOAD']).download_file(entry[2], app.config['FILEPATH'] + entry[2])
-				return render_template('entry.html', entry=entry, file=entry[2])
-			except:
-				return render_template('entry.html', entry=entry, file=-1)
+	print(entry)
+
+	if os.path.isfile(app.config['FILEPATH'] + entry[2]):
+		return render_template('entry.html', entry=entry, file=entry[2])
 	else:
-		return redirect(url_for('login'))
-
+		try:
+			s3 = boto3.resource('s3')
+			s3.Bucket(app.config['S3UPLOAD']).download_file(entry[2], app.config['FILEPATH'] + entry[2])
+			return render_template('entry.html', entry=entry, file=entry[2])
+		
+		except:
+			return render_template('entry.html', entry=entry, file=-1)
 
 @app.route('/file/<file>')
+@auth.required
 def getFile(file):
 
 	if os.path.isfile(app.config['FILEPATH'] + file):
@@ -143,13 +118,10 @@ def getFile(file):
 
 
 @app.route('/updateStatus/<type>/<id>', methods = ['POST'])
+@auth.required
 def update(type, id):
 	if 'intern' in session and session['intern'] == 'ok':
-		conn = db.conn()
-		cursor = conn.cursor()
-		md = """update website.intern set status_num = """ + type + """ where id = """ + id
-		cursor.execute(md)
-		conn.commit()
+		db.util.updateStatusNum(id, type)
 
 		return redirect(url_for('intern'))
 	else:
@@ -157,29 +129,31 @@ def update(type, id):
 
 
 @app.route('/editStatus', methods = ['POST'])
+@auth.required
 def edit():
-	if 'intern' in session and session['intern'] == 'ok':
+
+	try:
 		entry = request.form["entry"]
 		new = request.form["new"]
-		
-		conn = db.conn()
-		cursor = conn.cursor()
-		md = """update website.intern set status = \"""" + new + """\" where id = """ + entry
 
-		cursor.execute(md)
-		conn.commit()
+		print(entry + " " + new)
+
+		db.util.updateStatus(entry, new)
 
 		return "Ok"
-	else:
+	except:
 		return "Error"
 
 
 @app.route("/test")
+@auth.required
 def test():
-	thread = threading.Thread(target=processesPage, args=('https://arriscareers.taleo.net/careersection/ex/jobdetail.ftl?job=18002563&tz=GMT-05:00',))
-	thread.start()
+	#thread = threading.Thread(target=processesPage, args=('https://arriscareers.taleo.net/careersection/ex/jobdetail.ftl?job=18002563&tz=GMT-05:00',))
+	#thread.start()
 
-	return "HELLO"
+	data = db.util.queryAll("""SELECT * from `website`.`intern`""")
+	return render_template('intern.html', files=data)
+
 
 
 def processesPage(url):
@@ -196,6 +170,7 @@ def processesPage(url):
 	pdfkit.from_url(url, 'out.pdf', options=options)
 
 	print("DONE")
+	return
 
 
 @app.route("/robots.txt")
@@ -215,7 +190,7 @@ def addHeaders(response):
 	response.headers['Content-Security-Policy'] = "object-src 'self';script-src 'nonce-c3lzdGVtc2dvZA' https://ajax.googleapis.com https://www.google-analytics.com/analytics.js https://www.googletagmanager.com/gtag/ https://code.jquery.com https://cdnjs.cloudflare.com https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://cdn.datatables.net 'self' ; frame-ancestors 'self'; style-src 'self' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.datatables.net https://code.jquery.com https://maxcdn.bootstrapcdn.com https://use.fontawesome.com; font-src https://cdnjs.cloudflare.com https://use.fontawesome.com 'self'"
 	response.headers['Strict-Transport-Security'] = "max-age=63072000; includeSubDomains; preload"
 	response.headers['X-Frame-Options'] = "SAMEORIGIN"
-	response.headers['Cache-Control'] = "max-age=172800"
+	response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
 	return response
 
 if __name__ == '__main__':
