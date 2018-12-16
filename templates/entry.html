@@ -11,13 +11,12 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editStatus').addEventListener('click', function editStatus() { 
-    console.log("Hello World")
             var txt;
             var statusText = prompt("Edit Status:", status);
             if(statusText != null && statusText != ""){
                 document.getElementById("editStatusText").innerHTML = 'Status: ' + statusText;
 
-                $.post("/editStatus",
+                $.post("/intern/editStatus",
                 {
                     entry: "{{ entry[0] }}",
                     new: statusText
@@ -41,27 +40,27 @@ document.addEventListener('DOMContentLoaded', function () {
  
 
             {% if entry[5] == 0%}
-                <form action='/updateStatus/1/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
                 </form>
                 
-                <form action='/updateStatus/2/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
                 </form>
             {% elif entry[5] == 1 %}
-                <form action='/updateStatus/0/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
                 </form>
                 
-                <form action='/updateStatus/2/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
                 </form>
             {% else %}
-                <form action='/updateStatus/0/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
                 </form>
                 
-                <form action='/updateStatus/1/{{ entry[0] }}' method="post">
+                <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
                     <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
                 </form>
             {% endif %}

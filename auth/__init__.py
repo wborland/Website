@@ -8,13 +8,21 @@ def required(fn):
         try:
             s = session['intern']
             if s != 'ok':
-                session['redirect'] = fn.__name__
-                print("Bad " + fn.__name__)
+                if '.' in fn.__module__:
+                    session['redirect'] = fn.__module__.split(".",1)[1]  + "." + fn.__name__
+                else:
+                    session['redirect'] = fn.__name__
+
                 return redirect(url_for('login'))
 
         except:
-            session['redirect'] = fn.__name__
-            print("Bad " + fn.__name__)
+            print(fn.__module__)
+
+            if '.' in fn.__module__:
+                session['redirect'] = fn.__module__.split(".",1)[1]  + "." + fn.__name__
+            else:
+                session['redirect'] = fn.__name__
+
             return redirect(url_for('login'))
 
         return fn(*args, **kwargs)
