@@ -1,8 +1,12 @@
 $(document).ready(function() {
+  
+  
+  
   if(typeof intern != "undefined"){
-    $('#intern').DataTable({
+    var table = $('#intern').DataTable({
       "lengthMenu": [[-1, 25, 50, 100], ["All", 25, 50, 100]]
     });
+    table.order( [ 0, 'dec' ]).draw()
   }
 
 
