@@ -6,6 +6,8 @@ import db.util
 import auth
 import boto3
 import uuid
+import threading
+import time
 
 intern = Blueprint('intern', 'intern', url_prefix='/intern')
 
@@ -16,23 +18,25 @@ def internIndex(error):
 	return render_template('intern.html', files=out, error=error)
 
 
-@intern.route('/admin')
+@intern.route('/addEntry')
 @auth.required
-def admin():
-    return render_template('admin.html')
+def addEntry():
+    return render_template('addEntry.html')
 
 
 @intern.route('/upload', methods = ['POST'])
 @auth.required
 def upload():
-	s3 = boto3.resource('s3')
 	f = request.files['file']
 	name = request.form['name']
 	position = request.form["position"]
 
+	if name is None or position is None or f is None:
+		return redirect(url_for('intern.internIndex', error="Incorrect Form"))
+
+	s3 = boto3.resource('s3')
 	fileName =  str(uuid.uuid4()) + "." + f.filename.rsplit('.', 1)[1].lower()
 	s3.Bucket(flaskapp.app.config['S3UPLOAD']).put_object(Key=fileName, Body=f)
-
 	db.util.addEntry(name, fileName, position)
 
 	return redirect(url_for('intern.internIndex'))
@@ -41,8 +45,6 @@ def upload():
 @auth.required
 def entry(id):
 	entry = db.util.queryOne("""SELECT * from `website`.`intern` WHERE id =""" + id)
-
-	print(entry)
 
 	if os.path.isfile(flaskapp.app.config['FILEPATH'] + entry[2]):
 		return render_template('entry.html', entry=entry, file=entry[2])

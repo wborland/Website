@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"> 
 <head>
-  <title>Intern</title>
+  <title>Entry</title>
 </head>
 
 {% extends "bass.html" %}
@@ -11,79 +11,74 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editStatus').addEventListener('click', function editStatus() { 
-            var txt;
-            var statusText = prompt("Edit Status:", status);
-            if(statusText != null && statusText != ""){
-                document.getElementById("editStatusText").innerHTML = 'Status: ' + statusText;
-
-                $.post("/intern/editStatus",
-                {
-                    entry: "{{ entry[0] }}",
-                    new: statusText
-                });
-            } 
+        var txt;
+        var statusText = prompt("Edit Status:", status);
+        if(statusText != null && statusText != ""){
+            document.getElementById("editStatusText").innerHTML = 'Status: ' + statusText;
+            $.post("/intern/editStatus",
+            {
+                entry: "{{ entry[0] }}",
+                new: statusText
+            });
+        } 
     });
 });
-        
-        </script>
+</script>
 
 <div class="container">
-
 
         <button type="button" class="alignright btn btn-outline-dark" id="editStatus">Edit</button>
         <h3>{{ entry[1] }}</h3>
         <h6>{{ entry[3] }}</h6>
-
-        <div>
             
-            <p id="editStatusText" class="alignleft">Status: {{ entry[4] }}</p>
- 
+            <div class="row">
+                <div class="col-sm-6">
+                    <p id="editStatusText" class="alignleft">Status: {{ entry[4] }}</p>
+                </div>
 
-            {% if entry[5] == 0%}
-                <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
-                </form>
-                
-                <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
-                </form>
-            {% elif entry[5] == 1 %}
-                <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
-                </form>
-                
-                <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
-                </form>
-            {% else %}
-                <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
-                </form>
-                
-                <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
-                    <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
-                </form>
-            {% endif %}
-
-        </div>
-        <br>
-        <br>
+                <div class="col-sm-6">
+                    {% if entry[5] == 0%}
+                        <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
+                        </form>
+                        
+                        <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
+                        </form>
+                    {% elif entry[5] == 1 %}
+                        <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
+                        </form>
+                        
+                        <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
+                        </form>
+                    {% else %}
+                        <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
+                        </form>
+                        
+                        <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
+                            <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
 </div>
 
 
 {% if file != -1 %}
-<div class="container">
+    <div class="container">
         <div class="media mobile">
             <object data="/file/{{ entry[2] }}" type="application/pdf" width="100%" height=900></object>
         </div>
 
         <p class="text-center mobileShow">Download the job posting <a href="/file/{{ entry[2] }}" target="_blank">here</a>.</p>
-</div>
+    </div>
 {% else %}
     <p class="text-center">There is no job posting for this entry.</p>
 {% endif %}
 
-<span class="alignleft glyphicon glyphicon-pencil"></span>
 
 {% endblock %}
 

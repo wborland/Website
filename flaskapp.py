@@ -12,6 +12,10 @@ import pdfkit
 import requests
 import threading
 import auth
+import socket
+import time
+
+
 
 app = Flask(__name__)
 app.register_blueprint(intern)
@@ -39,6 +43,13 @@ def index():
     """
 	return render_template("index.html")
 
+@app.route('/admin')
+@auth.required
+def admin():
+
+	admin = db.util.getAdmin()
+
+	return render_template("admin.html", c = socket.gethostname(), n = admin[0][0], i = admin[1][0])
 
 @app.route('/resume')
 def resume():
