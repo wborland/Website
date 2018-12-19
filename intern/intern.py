@@ -58,20 +58,15 @@ def entry(id):
 			return render_template('entry.html', entry=entry, file=-1)
 
 
-@intern.route('/updateStatus/<type>/<id>', methods = ['POST'])
+@intern.route('/updateEntry', methods = ['POST'])
 @auth.required
-def update(type, id):
-    db.util.updateStatusNum(id, type)
-    return redirect(url_for('intern.internIndex'))
-
-
-@intern.route('/editStatus', methods = ['POST'])
-@auth.required
-def edit():
+def updateEntry():
 	try:
 		entry = request.form["entry"]
-		new = request.form["new"]
-		db.util.updateStatus(entry, new)
+		statusText = request.form["statusText"]
+		statusNum = request.form["statusNum"]
+
+		db.util.updateEntry(entry, statusText, statusNum)
 
 		return "Ok"
 	except:
