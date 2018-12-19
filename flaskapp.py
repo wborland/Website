@@ -44,6 +44,7 @@ def index():
 	return render_template("index.html")
 
 @app.route('/admin')
+@auth.required
 def admin():
 
 	admin = db.util.getAdmin()
