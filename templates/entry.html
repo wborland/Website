@@ -10,61 +10,55 @@
 <script type="text/javascript" nonce="c3lzdGVtc2dvZA">
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('editStatus').addEventListener('click', function editStatus() { 
-        var txt;
-        var statusText = prompt("Edit Status:", status);
-        if(statusText != null && statusText != ""){
-            document.getElementById("editStatusText").innerHTML = 'Status: ' + statusText;
-            $.post("/intern/editStatus",
-            {
-                entry: "{{ entry[0] }}",
-                new: statusText
-            });
-        } 
+    document.getElementById('editModalSubmit').addEventListener('click', function editModalSubmit() { 
+        var statusText = document.getElementById('status').value
+        var statusNum = document.getElementById('status_num').value
+
+        $.post("/intern/updateEntry",{
+            entry: "{{ entry[0] }}",
+            statusText: statusText,
+            statusNum: statusNum
+        },function(result){
+            window.location.reload(true); 
+        });
+
+
+
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('editModal').addEventListener('click', function editModal() { 
+        document.getElementById('status').value = document.getElementById('editStatusText').innerHTML
+        document.getElementById('{{ entry[5] }}').selected = true;
+        $('#modal').modal('show');
     });
 });
 </script>
 
 <div class="container">
+    <button type="button" class="alignright btn btn-outline-dark" id='editModal'>Edit</button>
+    <h3>{{ entry[1] }}</h3>
+    <h6>{{ entry[3] }}</h6>
+          
+    <div class="row">
+        <div class="col-sm-6">
+            <p class="alignleft">Status: <span id="editStatusText">{{ entry[4] }}</span></p>
+        </div>
 
-        <button type="button" class="alignright btn btn-outline-dark" id="editStatus">Edit</button>
-        <h3>{{ entry[1] }}</h3>
-        <h6>{{ entry[3] }}</h6>
-            
-            <div class="row">
-                <div class="col-sm-6">
-                    <p id="editStatusText" class="alignleft">Status: {{ entry[4] }}</p>
-                </div>
-
-                <div class="col-sm-6">
-                    {% if entry[5] == 0%}
-                        <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
-                        </form>
-                        
-                        <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
-                        </form>
-                    {% elif entry[5] == 1 %}
-                        <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
-                        </form>
-                        
-                        <form action='/intern/updateStatus/2/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-warning">Rejected</button>
-                        </form>
-                    {% else %}
-                        <form action='/intern/updateStatus/0/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-primary">Reset</button>
-                        </form>
-                        
-                        <form action='/intern/updateStatus/1/{{ entry[0] }}' method="post">
-                            <button type="submit" class="alignright btn btn-entry btn-info">Interview</button>
-                        </form>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="col-sm-6">
+            {% if entry[5] == 0%}
+                <span class="badge badge-secondary alignright">Applied</span>
+            {% elif entry[5] == 1 %}
+                <span class="badge badge-primary alignright">Interview</span>
+            {% else %}
+                <span class="badge badge-danger alignright">Rejected</span>     
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+
 
 
 {% if file != -1 %}
@@ -78,6 +72,39 @@ document.addEventListener('DOMContentLoaded', function () {
 {% else %}
     <p class="text-center">There is no job posting for this entry.</p>
 {% endif %}
+
+
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit</h4>
+                <a class="close" data-dismiss="modal">&times;</a>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <input type="text" class="form-control" id="status">
+                </div>
+
+                <div class="form-group">
+                    <label for="status_num">Progress</label>
+                    <select class="form-control" id="status_num">
+                        <option id="0" value="0">Applied</option>
+                        <option id="1" value="1">Interview</option>
+                        <option id="2" value="2">Rejected</option>
+                    </select>
+                </div>
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success" id="editModalSubmit" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}
