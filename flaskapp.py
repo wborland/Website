@@ -16,9 +16,9 @@ import socket
 import time
 
 
-
 app = Flask(__name__)
 app.register_blueprint(intern)
+
 
 if os.environ.get('circle') is None:
 	app.config.from_pyfile('../config.cfg')

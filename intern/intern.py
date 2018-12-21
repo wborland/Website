@@ -9,6 +9,11 @@ import uuid
 import threading
 import time
 
+
+
+
+
+
 intern = Blueprint('intern', 'intern', url_prefix='/intern')
 
 @intern.route('/', defaults=({'error': None}))
@@ -44,10 +49,12 @@ def upload():
 @intern.route('/entry/<id>')
 @auth.required
 def entry(id):
-	entry = db.util.queryOne("""SELECT * from `website`.`intern` WHERE id =""" + id)
+	entry = list(db.util.queryOne("""SELECT * from `website`.`intern` WHERE id =""" + id))
+	notes = entry[7].split('\n') if entry[7] is not None else entry[7]
+
 
 	if os.path.isfile(flaskapp.app.config['FILEPATH'] + entry[2]):
-		return render_template('entry.html', entry=entry, file=entry[2])
+		return render_template('entry.html', entry=entry, file=entry[2], notes=notes)
 	else:
 		try:
 			s3 = boto3.resource('s3')
@@ -65,9 +72,10 @@ def updateEntry():
 		entry = request.form["entry"]
 		statusText = request.form["statusText"]
 		statusNum = request.form["statusNum"]
+		notes = request.form["notes"]
 
-		db.util.updateEntry(entry, statusText, statusNum)
+		db.util.updateEntry(entry, statusText, statusNum, notes)
 
 		return "Ok"
-	except:
-		return "Error"
+	except Exception as e:
+		return str(e)

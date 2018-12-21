@@ -55,15 +55,14 @@ def addEntry(name, file, position):
     conn.close()
 
 
-def updateEntry(id, status, num):
+def updateEntry(id, status, num, notes):
     conn = db.conn()
-
     cursor = conn.cursor()
 
     if num == "1":
-        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """, had_interview = 1 where id = """ + id)
+        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """, notes =\"""" + notes + """\" , had_interview = 1 where id = """ + id)
     else:
-        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """ where id = """ + id)
+        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """, notes = \"""" + notes + """\" where id = """ + id)
     
     conn.commit()
     conn.close()
