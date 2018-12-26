@@ -35,13 +35,13 @@ jobs:
       - run:
           name: run tests
           command: nose2 -v
+      
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "$SSH_COMMMAND"
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
-
-       - run:
-          name: Deploy Over SSH
-          command: |
-            ssh $SSH_USER@$SSH_HOST "$SSH_COMMMAND"
           
