@@ -52,4 +52,13 @@ jobs:
           name: Deploy Dev
           command: |
             if [ "${CIRCLE_BRANCH}" == "dev" ]; then  ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "$SSH_COMMMAND"; fi
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+      - deploy:
+          requires:
+            - build
         
