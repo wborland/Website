@@ -35,13 +35,21 @@ jobs:
       - run:
           name: run tests
           command: nose2 -v
-      
-      - run:
-          name: Deploy Over SSH
-          command: |
-            ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "$SSH_COMMMAND"
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
-          
+
+  deploy:
+    machine:
+      enabled: true
+    working_directory: ~/flaskapp
+
+    steps:
+      - checkout
+      
+      - run:
+          name: Deploy Dev
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "dev" ]; then  ssh -oStrictHostKeyChecking=no $SSH_USER@$SSH_HOST "$SSH_COMMMAND"; fi
+        
