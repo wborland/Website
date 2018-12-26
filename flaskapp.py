@@ -49,7 +49,7 @@ def admin():
 
 	admin = db.util.getAdmin()
 
-	return render_template("admin.html", c = socket.gethostname(), n = admin[0][0], i = admin[1][0])
+	return render_template("admin.html", c = os.uname()[1], n = admin[0][0], i = admin[1][0])
 
 @app.route('/resume')
 def resume():
