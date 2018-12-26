@@ -11,3 +11,4 @@ werkzeug
 mysqlclient
 pdfkit
 requests
+configparser
