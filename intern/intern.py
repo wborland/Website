@@ -59,7 +59,7 @@ def entry(id):
 		try:
 			s3 = boto3.resource('s3')
 			s3.Bucket(flaskapp.app.config['S3UPLOAD']).download_file(entry[2], flaskapp.app.config['FILEPATH'] + entry[2])
-			return render_template('entry.html', entry=entry, file=entry[2])
+			return render_template('entry.html', entry=entry, file=entry[2], notes=notes)
 		
 		except:
 			return render_template('entry.html', entry=entry, file=-1)
