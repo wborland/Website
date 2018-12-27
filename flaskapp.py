@@ -77,7 +77,7 @@ def login():
 @auth.required
 def getFile(file):
 	if os.path.isfile(app.config['FILEPATH'] + file):
-		return send_file(app.config['FILEPATH'] + file)
+		return send_file(app.config['FILEPATH'] + file, attachment_filename='ohhey.pdf')
 	else:
 		return render_template('404.html')
 
