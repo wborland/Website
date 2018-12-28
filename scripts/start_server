@@ -1,3 +1,4 @@
 #!/bin/bash
+sudo pip install -r /home/ubuntu/flaskapp/requirements.txt
 sudo service apache2 start
 
