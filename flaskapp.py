@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, jsonify, Response, make_response, Blueprint
 from werkzeug.utils import secure_filename
 from flasgger import Swagger
-from intern.intern import intern
+from intern.intern import intern_blueprint
 
 import os
 import db.util
@@ -17,7 +17,7 @@ import time
 
 
 app = Flask(__name__)
-app.register_blueprint(intern)
+app.register_blueprint(intern_blueprint, url_prefix='/intern')
 
 
 if os.environ.get('config') is None:
@@ -119,4 +119,4 @@ def addHeaders(response):
 	
 
 if __name__ == '__main__':
-  app.run(threaded=True, processes=4)
+  app.run(threaded=True)
