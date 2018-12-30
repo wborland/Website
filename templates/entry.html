@@ -78,6 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="row col-sm-12">
             <p>{{ notes|join('<br>'|safe) }}</p>
         </div>
+    {% else %}
+        <div class="row col-sm-12">
+            <h4>Notes</h4>
+        </div>
+
+        <div class="row col-sm-12">
+            <p>None</p>
+        </div>
     {% endif %}
 </div>
 

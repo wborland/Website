@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.register_blueprint(intern)
 
 
-if os.environ.get('circle') is None:
+if os.environ.get('config') is None:
 	app.config.from_pyfile('../config.cfg')
 
 if 'SWAGGER' in app.config:
@@ -44,7 +44,6 @@ def index():
 def admin():
 
 	admin = db.util.getAdmin()
-
 	return render_template("admin.html", c = socket.gethostname(), n = admin[0][0], i = admin[1][0])
 
 @app.route('/resume')
