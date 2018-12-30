@@ -22,13 +22,9 @@ app.register_blueprint(intern)
 
 if os.environ.get('circle') is None:
 	app.config.from_pyfile('../config.cfg')
-else:
-	app.config['PASSWORD'] = os.environ.get('PASSWORD')
-	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 if 'SWAGGER' in app.config:
 	Swagger(app)
-
 
 @app.route('/')
 def index():
@@ -49,7 +45,7 @@ def admin():
 
 	admin = db.util.getAdmin()
 
-	return render_template("admin.html", c = os.uname()[1], n = admin[0][0], i = admin[1][0])
+	return render_template("admin.html", c = socket.gethostname(), n = admin[0][0], i = admin[1][0])
 
 @app.route('/resume')
 def resume():
