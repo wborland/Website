@@ -11,8 +11,6 @@ import uuid
 import threading
 import time
 
-
-
 @intern_blueprint.route('/', defaults=({'error': None}))
 @auth.required
 def internIndex(error):
@@ -59,7 +57,7 @@ def entry(id):
 			return render_template('entry.html', entry=entry, file=entry[2], notes=notes)
 		
 		except:
-			return render_template('entry.html', entry=entry, file=-1)
+			return render_template('entry.html', entry=entry, file=-1, notes=notes)
 
 
 @intern_blueprint.route('/updateEntry', methods = ['POST'])

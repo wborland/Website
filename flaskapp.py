@@ -117,6 +117,5 @@ def addHeaders(response):
 	response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
 	return response
 	
-
 if __name__ == '__main__':
   app.run(threaded=True)
