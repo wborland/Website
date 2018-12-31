@@ -1,5 +1,7 @@
 from flask import Flask, render_template, Blueprint, request, redirect, url_for, session
 
+intern_blueprint = Blueprint('intern', __name__)
+
 import flaskapp
 import os
 import db.util
@@ -11,25 +13,20 @@ import time
 
 
 
-
-
-
-intern = Blueprint('intern', 'intern', url_prefix='/intern')
-
-@intern.route('/', defaults=({'error': None}))
+@intern_blueprint.route('/', defaults=({'error': None}))
 @auth.required
 def internIndex(error):
 	out = db.util.queryAll("""SELECT * from `website`.`intern`""")
 	return render_template('intern.html', files=out, error=error)
 
 
-@intern.route('/addEntry')
+@intern_blueprint.route('/addEntry')
 @auth.required
 def addEntry():
     return render_template('addEntry.html')
 
 
-@intern.route('/upload', methods = ['POST'])
+@intern_blueprint.route('/upload', methods = ['POST'])
 @auth.required
 def upload():
 	f = request.files['file']
@@ -46,7 +43,7 @@ def upload():
 
 	return redirect(url_for('intern.internIndex'))
 
-@intern.route('/entry/<id>')
+@intern_blueprint.route('/entry/<id>')
 @auth.required
 def entry(id):
 	entry = list(db.util.queryOne("""SELECT * from `website`.`intern` WHERE id =""" + id))
@@ -65,7 +62,7 @@ def entry(id):
 			return render_template('entry.html', entry=entry, file=-1)
 
 
-@intern.route('/updateEntry', methods = ['POST'])
+@intern_blueprint.route('/updateEntry', methods = ['POST'])
 @auth.required
 def updateEntry():
 	try:

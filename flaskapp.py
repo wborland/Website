@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file, send_from_directory, redirect, url_for, session, jsonify, Response, make_response, Blueprint
 from werkzeug.utils import secure_filename
 from flasgger import Swagger
-from intern.intern import intern
+from intern.intern import intern_blueprint
 
 import os
 import db.util
@@ -17,18 +17,14 @@ import time
 
 
 app = Flask(__name__)
-app.register_blueprint(intern)
+app.register_blueprint(intern_blueprint, url_prefix='/intern')
 
 
-if os.environ.get('circle') is None:
+if os.environ.get('config') is None:
 	app.config.from_pyfile('../config.cfg')
-else:
-	app.config['PASSWORD'] = os.environ.get('PASSWORD')
-	app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 if 'SWAGGER' in app.config:
 	Swagger(app)
-
 
 @app.route('/')
 def index():
@@ -48,8 +44,7 @@ def index():
 def admin():
 
 	admin = db.util.getAdmin()
-
-	return render_template("admin.html", c = os.uname()[1], n = admin[0][0], i = admin[1][0])
+	return render_template("admin.html", c = socket.gethostname(), n = admin[0][0], i = admin[1][0])
 
 @app.route('/resume')
 def resume():
@@ -124,4 +119,4 @@ def addHeaders(response):
 	
 
 if __name__ == '__main__':
-  app.run(threaded=True, processes=4)
+  app.run(threaded=True)
