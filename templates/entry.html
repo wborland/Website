@@ -62,8 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="badge badge-secondary alignright">Applied</span>
             {% elif entry[5] == 1 %}
                 <span class="badge badge-primary alignright">Interview</span>
-            {% else %}
-                <span class="badge badge-danger alignright">Rejected</span>     
+            {% elif entry[5] == 2 %}
+                <span class="badge badge-danger alignright">Rejected</span>
+            {% elif entry[5] == 3 %}
+                <span class="badge badge-success alignright">Offer</span>      
             {% endif %}
         </div>
     </div>
@@ -103,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option id="0" value="0">Applied</option>
                         <option id="1" value="1">Interview</option>
                         <option id="2" value="2">Rejected</option>
+                        <option id="3" value="3">Offer</option>
                     </select>
                 </div>
                 
