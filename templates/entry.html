@@ -42,9 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveEdit').addEventListener('click', function editModal() { 
+
+        document.getElementById('entryTitle').textContent = document.getElementById('editTitle').textContent;
         
         document.getElementById('entryShow').style.display = "block";
         document.getElementById('editForm').style.display = "none";
+
+
 
 
     });
