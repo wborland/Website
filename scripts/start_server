@@ -1,4 +1,9 @@
 #!/bin/bash
 sudo pip install -r /home/ubuntu/flaskapp/requirements.txt
+command=$(aws ssm get-parameters --region us-east-1 --names s3ConfigDev --query Parameters[0].Value | tr -d '"')
+echo $command
+aws s3 cp $command 
 sudo service apache2 start
+
+
 
