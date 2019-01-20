@@ -8,64 +8,43 @@
 {% block content %}
 
 <script type="text/javascript" nonce="c3lzdGVtc2dvZA">
-
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editModalSubmit').addEventListener('click', function editModalSubmit() { 
         var statusText = document.getElementById('status').value
         var statusNum = document.getElementById('status_num').value
         var notes = document.getElementById('notes').value
-
         $.post("/intern/updateEntry",{
             entry: "{{ entry[0] }}",
             statusText: statusText,
             statusNum: statusNum,
             notes: notes
-
         },function(result){
             window.location.reload(true); 
         });
-
-
-
     });
 });
-
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editModal').addEventListener('click', function editModal() { 
-        
-        document.getElementById('entryShow').style.display = "none";
-        document.getElementById('editForm').style.display = "block";
-
-        document.getElementById('editTitle').value = document.getElementById('entryTitle').textContent;
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('saveEdit').addEventListener('click', function editModal() { 
-
-        document.getElementById('entryTitle').textContent = document.getElementById('editTitle').textContent;
-        
-        document.getElementById('entryShow').style.display = "block";
-        document.getElementById('editForm').style.display = "none";
-
-
-
-
+        document.getElementById('status').value = document.getElementById('editStatusText').innerHTML
+        document.getElementById('{{ entry[5] }}').selected = true;
+        $('#modal').modal('show');
     });
 });
 </script>
 
-<div class="container" id="entryShow">
+<div class="container">
     <button type="button" class="alignright btn btn-outline-dark" id='editModal'>Edit</button>
 
-    <h3 id="entryTitle">{{ entry[1] }}</h3>
-
+    <h3>{{ entry[1] }}</h3>
     {% if file != -1 %}
-        <h6 id="entryFile"><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
+        <h6><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
     {% else %}
-        <h6 id="entryFile">{{ entry[3] }}</h6>
+        <h6>{{ entry[3] }}</h6>
     {% endif %}
- 
+
+
+    
+          
     <div class="row">
         <div class="col-sm-6">
             <p class="alignleft">Status: <span id="editStatusText">{{ entry[4] }}</span></p>
@@ -82,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
  
+
+
     {% if notes is not none %}
         <div class="row col-sm-12">
             <h4>Notes</h4>
@@ -92,64 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     {% endif %}
 </div>
-
-
-<div class="container" id="editForm" >
-
-    <div class="row">
-        <div class="col-sm-6">
-            <input type="text" class="form-control form-control-lg" id="editTitle">
-        </div>
-
-        <div class="col-sm-6">
-            <button type="button" class="alignright btn btn-success" id='saveEdit'>Save</button>
-        </div>
-    </div>
-
-    <div class="row col-sm-12">
-        {% if file != -1 %}
-            <h6 id="entryFile"><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
-        {% else %}
-            <h6 id="entryFile">{{ entry[3] }}</h6>
-        {% endif %}
-    </div>
-    
- 
-    <div class="row">
-        <div class="col-sm-6">
-            <p class="alignleft">Status: <span id="editStatusText">{{ entry[4] }}</span></p>
-        </div>
-
-        <div class="col-sm-6">
-            {% if entry[5] == 0%}
-                <span class="badge badge-secondary alignright">Applied</span>
-            {% elif entry[5] == 1 %}
-                <span class="badge badge-primary alignright">Interview</span>
-            {% elif entry[5] == 2 %}
-                <span class="badge badge-danger alignright">Rejected</span>
-            {% elif entry[5] == 3 %}
-                <span class="badge badge-success alignright">Offer</span>      
-            {% endif %}
-        </div>
-    </div>
- 
-    {% if notes is not none %}
-        <div class="row col-sm-12">
-            <h4>Notes</h4>
-        </div>
-
-        <div class="row col-sm-12">
-            <p>{{ notes|join('<br>'|safe) }}</p>
-        </div>
-    {% endif %}
-            
-            
-
-</div>
-
-
-
-
 
 
 
@@ -173,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option id="0" value="0">Applied</option>
                         <option id="1" value="1">Interview</option>
                         <option id="2" value="2">Rejected</option>
-                        <option id="3" value="3">Offer</option>
                     </select>
                 </div>
                 
@@ -193,8 +115,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 {% endblock %}
-
-
-
-
 
