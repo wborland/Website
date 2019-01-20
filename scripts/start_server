@@ -12,5 +12,5 @@ else
     exit
 fi
 
-aws s3 cp $command 
+aws $command 
 sudo service apache2 start
