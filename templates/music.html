@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"> 
+   
+<head>
+  <title>Intern</title>
+</head>
+
+{% extends "bass.html" %}
+{% block content %}
+
+
+  <div class="table-responsive container-fluid">
+    <audio controls>
+        <source src="{{ file }}" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio> 
+    
+  </div>
+  
+
+{% endblock %}
+
+
+
