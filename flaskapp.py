@@ -59,7 +59,12 @@ def login():
 			if 'redirect' in session:
 				url = session['redirect']
 				session.pop('redirect', None)
-				return redirect(url_for(url))
+
+				try:
+					return redirect(url_for(url))
+				except:
+					return redirect(url_for('intern.internIndex'))
+					
 			else:
 				return redirect(url_for('index'))
 		else:
@@ -67,15 +72,37 @@ def login():
 	else:
 		return render_template('login.html')
 
-
 @app.route('/file/<file>')
 @auth.required
 def getFile(file):
 	if os.path.isfile(app.config['FILEPATH'] + file):
-		return send_file(app.config['FILEPATH'] + file, attachment_filename='ohhey.pdf')
+		return send_file(app.config['FILEPATH'] + file)
 	else:
-		return render_template('404.html')
+		try:
+			s3 = boto3.resource('s3')
+			s3.Bucket(app.config['S3UPLOAD']).download_file(file, app.config['FILEPATH'] + file)
+			return send_file(app.config['FILEPATH'] + file)
+		except:
+			return render_template('404.html')
 
+
+@app.route('/music')
+def music():
+	if os.path.isfile(app.config['FILEPATH'] + 'Acadiana.wav'):
+		print(app.config['FILEPATH'] + 'Acadiana.wav')
+		return render_template('music.html', file = 'Acadiana.wav')
+	else:
+		try:
+			s3 = boto3.resource('s3')
+			s3.Bucket(app.config['S3UPLOAD']).download_file('Acadiana.wav', app.config['FILEPATH'] + 'Acadiana.wav')
+			return render_template('music.html', file = app.config['FILEPATH'] + 'Acadiana.wav')
+		except:
+			return render_template('404.html')
+
+@app.route("/clear")
+def clear():
+	session.clear()
+	return redirect(url_for('index'))
 
 @app.route("/test")
 @auth.required
@@ -87,8 +114,6 @@ def test():
 
 	#data = db.util.queryAll("""SELECT * from `website`.`intern`""")
 	#return render_template('intern.html', files=data)
-
-
 
 def processesPage(url):
 	r = requests.get(url)

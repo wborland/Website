@@ -32,26 +32,89 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editModal').addEventListener('click', function editModal() { 
-        document.getElementById('status').value = document.getElementById('editStatusText').innerHTML
-        document.getElementById('{{ entry[5] }}').selected = true;
-        $('#modal').modal('show');
+        
+        document.getElementById('entryShow').style.display = "none";
+        document.getElementById('editForm').style.display = "block";
+
+        document.getElementById('editTitle').value = document.getElementById('entryTitle').textContent;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('saveEdit').addEventListener('click', function editModal() { 
+
+        document.getElementById('entryTitle').textContent = document.getElementById('editTitle').textContent;
+        
+        document.getElementById('entryShow').style.display = "block";
+        document.getElementById('editForm').style.display = "none";
+
+
+
+
     });
 });
 </script>
 
-<div class="container">
+<div class="container" id="entryShow">
     <button type="button" class="alignright btn btn-outline-dark" id='editModal'>Edit</button>
 
-    <h3>{{ entry[1] }}</h3>
+    <h3 id="entryTitle">{{ entry[1] }}</h3>
+
     {% if file != -1 %}
-        <h6><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
+        <h6 id="entryFile"><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
     {% else %}
-        <h6>{{ entry[3] }}</h6>
+        <h6 id="entryFile">{{ entry[3] }}</h6>
     {% endif %}
+ 
+    <div class="row">
+        <div class="col-sm-6">
+            <p class="alignleft">Status: <span id="editStatusText">{{ entry[4] }}</span></p>
+        </div>
+
+        <div class="col-sm-6">
+            {% if entry[5] == 0%}
+                <span class="badge badge-secondary alignright">Applied</span>
+            {% elif entry[5] == 1 %}
+                <span class="badge badge-primary alignright">Interview</span>
+            {% else %}
+                <span class="badge badge-danger alignright">Rejected</span>     
+            {% endif %}
+        </div>
+    </div>
+ 
+    {% if notes is not none %}
+        <div class="row col-sm-12">
+            <h4>Notes</h4>
+        </div>
+
+        <div class="row col-sm-12">
+            <p>{{ notes|join('<br>'|safe) }}</p>
+        </div>
+    {% endif %}
+</div>
 
 
+<div class="container" id="editForm" >
+
+    <div class="row">
+        <div class="col-sm-6">
+            <input type="text" class="form-control form-control-lg" id="editTitle">
+        </div>
+
+        <div class="col-sm-6">
+            <button type="button" class="alignright btn btn-success" id='saveEdit'>Save</button>
+        </div>
+    </div>
+
+    <div class="row col-sm-12">
+        {% if file != -1 %}
+            <h6 id="entryFile"><a href="/file/{{ entry[2] }}" target="_blank">{{ entry[3] }}</a></h6>
+        {% else %}
+            <h6 id="entryFile">{{ entry[3] }}</h6>
+        {% endif %}
+    </div>
     
-          
+ 
     <div class="row">
         <div class="col-sm-6">
             <p class="alignleft">Status: <span id="editStatusText">{{ entry[4] }}</span></p>
@@ -70,8 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
  
-
-
     {% if notes is not none %}
         <div class="row col-sm-12">
             <h4>Notes</h4>
@@ -81,7 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
             <p>{{ notes|join('<br>'|safe) }}</p>
         </div>
     {% endif %}
+            
+            
+
 </div>
+
+
+
+
 
 
 

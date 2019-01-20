@@ -149,3 +149,7 @@ footer {
     overflow: auto; 
     -webkit-overflow-scrolling: touch;
 }
+
+#editForm {
+    display: none;
+}

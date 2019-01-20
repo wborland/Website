@@ -1,4 +1,16 @@
 #!/bin/bash
 sudo pip install -r /home/ubuntu/flaskapp/requirements.txt
-sudo service apache2 start
 
+if [ "$DEPLOYMENT_GROUP_NAME" == "dev" ] 
+then
+    command=$(aws ssm get-parameters --region us-east-1 --names s3ConfigDev --query Parameters[0].Value | tr -d '"')
+elif [ "$DEPLOYMENT_GROUP_NAME" == "prod" ]
+then
+    command=$(aws ssm get-parameters --region us-east-1 --names s3ConfigProd --query Parameters[0].Value | tr -d '"')
+else
+    sudo service apache2 start
+    exit
+fi
+
+aws $command 
+sudo service apache2 start
