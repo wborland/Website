@@ -1,5 +1,6 @@
 import boto3
 import db
+import time
 
 def queryAll(query):
     conn = db.conn()
@@ -30,20 +31,24 @@ def queryOne(query):
 
 def getAdmin():
 
-    out = list()
     conn = db.conn()
     cursor = conn.cursor()
+    cursor.execute("SELECT status_num, had_interview FROM website.intern")
+    
+    obj = cursor.fetchall()
+    entrys,interviews,offers = 0,0,0
 
-    cursor.execute("SELECT COUNT(id) FROM website.intern")
-    out.append(cursor.fetchone())
-
-    cursor.execute("SELECT COUNT(id) FROM website.intern where had_interview = 1")
-    out.append(cursor.fetchone())
+    for l in obj:
+        entrys += 1
+        if l[0] == 3:
+            offers += 1
+        if l[1] == 1:
+            interviews += 1
 
     conn.close()
     cursor.close()
 
-    return out
+    return entrys,interviews,offers
 
 def addEntry(name, file, position):
     conn = db.conn()
