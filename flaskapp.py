@@ -44,7 +44,7 @@ def index():
 def admin():
 
 	admin = db.util.getAdmin()
-	return render_template("admin.html", c = socket.gethostname(), n = admin[0], i = admin[1], o = admin[2])
+	return render_template("admin.html", c = socket.gethostname(), n = admin[0], i = admin[1], o = admin[2], admin=app.config)
 
 @app.route('/resume')
 def resume():
