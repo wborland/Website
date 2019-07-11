@@ -33,7 +33,7 @@ def getAdmin():
 
     conn = db.conn()
     cursor = conn.cursor()
-    cursor.execute("SELECT status_num, had_interview FROM website.intern")
+    cursor.execute("SELECT status_num, had_interview FROM website.jobs")
     
     obj = cursor.fetchall()
     entrys,interviews,offers = 0,0,0
@@ -54,7 +54,7 @@ def addEntry(name, file, position):
     conn = db.conn()
 
     cursor = conn.cursor()
-    cursor.execute(""" INSERT INTO `website`.`intern` (`name`, `file`, `position`) VALUES (%s, %s, %s);""", [name, file, position])
+    cursor.execute(""" INSERT INTO `website`.`jobs` (`name`, `file`, `position`) VALUES (%s, %s, %s);""", [name, file, position])
 
     conn.commit()
     conn.close()
@@ -65,9 +65,9 @@ def updateEntry(id, status, num, notes):
     cursor = conn.cursor()
 
     if num == "1":
-        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """, notes =\"""" + notes + """\" , had_interview = 1 where id = """ + id)
+        cursor.execute("""update website.jobs set status = \"""" + status + """\", status_num = """  + num + """, notes =\"""" + notes + """\" , had_interview = 1 where id = """ + id)
     else:
-        cursor.execute("""update website.intern set status = \"""" + status + """\", status_num = """  + num + """, notes = \"""" + notes + """\" where id = """ + id)
+        cursor.execute("""update website.jobs set status = \"""" + status + """\", status_num = """  + num + """, notes = \"""" + notes + """\" where id = """ + id)
     
     conn.commit()
     conn.close()
