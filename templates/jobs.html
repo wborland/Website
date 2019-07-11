@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"> 
+   
+<head>
+  <title>Jobs</title>
+</head>
+
+{% extends "bass.html" %}
+{% block content %}
+
+{% if error != None %}
+  <p>{{ error }}</p>
+{% endif %}
+
+  <div class="table-responsive container-fluid">
+      <table id="intern" class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Place</th>
+              <th scope="col">Position</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+      
+            {% for file in files %}
+              
+                {% if file[5] == 2 %}
+                  <tr class="table-danger">
+                {% elif file[5] == 1 %}
+                  <tr class="table-primary">
+                {% elif file[5] == 3 %}
+                  <tr class="table-success">
+                {% else %}
+                  <tr class="intern">
+                {% endif %}
+      
+                  <th scope="row">{{ loop.index }}</th>
+                  <td><a href="/jobs/entry/{{ file[0] }}">{{ file[1] }}</a></td>
+                  <td >{{ file[3] }}</td>
+                  <td>{{ file[4] }}</td>
+      
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    
+  </div>
+  
+
+
+
+
+{% endblock %}
+
+
+

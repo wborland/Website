@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var statusText = document.getElementById('status').value
         var statusNum = document.getElementById('status_num').value
         var notes = document.getElementById('notes').value
-        $.post("/intern/updateEntry",{
+        $.post("/jobs/updateEntry",{
             entry: "{{ entry[0] }}",
             statusText: statusText,
             statusNum: statusNum,

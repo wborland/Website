@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file, send_from_director
 from werkzeug.utils import secure_filename
 from flasgger import Swagger
 from intern.intern import intern_blueprint
+from intern.jobs import jobs_blueprint
 
 import os
 import db.util
@@ -18,6 +19,7 @@ import time
 
 app = Flask(__name__)
 app.register_blueprint(intern_blueprint, url_prefix='/intern')
+app.register_blueprint(jobs_blueprint, url_prefix='/jobs')
 
 
 if os.environ.get('config') is None:
