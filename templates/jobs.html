@@ -20,6 +20,7 @@
               <th scope="col">Place</th>
               <th scope="col">Position</th>
               <th scope="col">Status</th>
+              <th scope="col">Last Update</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,8 @@
                   <td><a href="/jobs/entry/{{ file[0] }}">{{ file[1] }}</a></td>
                   <td >{{ file[3] }}</td>
                   <td>{{ file[4] }}</td>
+                  <td>{{ file[8] }}</td>
+ 
       
               </tr>
             {% endfor %}
