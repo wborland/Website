@@ -15,7 +15,7 @@ import time
 
 @auth.required
 def jobIndex(error):
-	out = db.util.queryAll("""SELECT * from `website`.`jobs`""")
+	out = db.util.queryAll("""SELECT * from website.jobs""")
 	return render_template('jobs.html', files=out, error=error)
 
 
